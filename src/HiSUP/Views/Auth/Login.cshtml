@@ -1,43 +1,339 @@
 @{
-    ViewData["Title"] = "Login";
+    ViewData["Title"] = "Sign In — HiSUP";
 }
-<div class="row justify-content-center align-items-center py-5">
-    <div class="col-md-5">
-        <div class="card glass-card p-5">
-            <div class="text-center mb-4">
-                <h2 class="fw-bold" style="font-family: 'Outfit', sans-serif;">Welcome Back</h2>
-                <p class="text-muted">Sign in to access your HiSUP account</p>
+
+<div class="login-page-wrap">
+    <div class="login-card" id="roleCard">
+
+        <!-- Icon -->
+        <div class="login-icon-wrap">
+            <i class="bi bi-mortarboard-fill"></i>
+        </div>
+
+        <!-- Step 1: Role Selection -->
+        <div id="step-role">
+            <h2 class="login-title">Welcome Back</h2>
+            <p class="login-sub">Choose your role to get started</p>
+
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert-bar mb-3">
+                    <i class="bi bi-exclamation-triangle me-2"></i>@TempData["Error"]
+                </div>
+            }
+
+            <div class="role-list">
+                <button class="role-item" onclick="selectRole('Student', 'bi-mortarboard-fill', '#6366f1', 'Courses, grades, fees &amp; more')">
+                    <div class="role-icon" style="background:#6366f1;">
+                        <i class="bi bi-mortarboard-fill"></i>
+                    </div>
+                    <div class="role-info">
+                        <span class="role-name">Student</span>
+                        <span class="role-desc">Courses, grades, fees &amp; more</span>
+                    </div>
+                    <i class="bi bi-chevron-right role-arrow"></i>
+                </button>
+
+                <button class="role-item" onclick="selectRole('Faculty', 'bi-person-workspace', '#22c55e', 'Teaching, grading &amp; attendance')">
+                    <div class="role-icon" style="background:#22c55e;">
+                        <i class="bi bi-person-workspace"></i>
+                    </div>
+                    <div class="role-info">
+                        <span class="role-name">Faculty</span>
+                        <span class="role-desc">Teaching, grading &amp; attendance</span>
+                    </div>
+                    <i class="bi bi-chevron-right role-arrow"></i>
+                </button>
+
+                <button class="role-item" onclick="selectRole('Admin', 'bi-shield-lock-fill', '#3b82f6', 'System oversight &amp; management')">
+                    <div class="role-icon" style="background:#3b82f6;">
+                        <i class="bi bi-shield-lock-fill"></i>
+                    </div>
+                    <div class="role-info">
+                        <span class="role-name">Admin</span>
+                        <span class="role-desc">System oversight &amp; management</span>
+                    </div>
+                    <i class="bi bi-chevron-right role-arrow"></i>
+                </button>
+
+                <button class="role-item" onclick="selectRole('Finance', 'bi-cash-stack', '#f59e0b', 'Fee management &amp; reporting')">
+                    <div class="role-icon" style="background:#f59e0b;">
+                        <i class="bi bi-cash-stack"></i>
+                    </div>
+                    <div class="role-info">
+                        <span class="role-name">Finance</span>
+                        <span class="role-desc">Fee management &amp; reporting</span>
+                    </div>
+                    <i class="bi bi-chevron-right role-arrow"></i>
+                </button>
+
+                <button class="role-item" onclick="selectRole('Librarian', 'bi-book-fill', '#ef4444', 'Library &amp; circulation')">
+                    <div class="role-icon" style="background:#ef4444;">
+                        <i class="bi bi-book-fill"></i>
+                    </div>
+                    <div class="role-info">
+                        <span class="role-name">Librarian</span>
+                        <span class="role-desc">Library &amp; circulation</span>
+                    </div>
+                    <i class="bi bi-chevron-right role-arrow"></i>
+                </button>
             </div>
 
-            <form asp-controller="Auth" asp-action="Login" method="post">
+            <p class="login-footer-text">Don't have an account? <a asp-controller="Auth" asp-action="Register">Create one</a></p>
+        </div>
+
+        <!-- Step 2: Email/Password Login -->
+        <div id="step-login" style="display:none;">
+            <button class="back-btn" onclick="goBack()">
+                <i class="bi bi-arrow-left me-1"></i> Back
+            </button>
+
+            <!-- Selected role badge -->
+            <div class="selected-role-badge mb-3" id="selectedRoleBadge">
+                <div class="role-icon-sm" id="selectedRoleIcon">
+                    <i class="bi bi-mortarboard-fill" id="selectedRoleIconClass"></i>
+                </div>
+                <span id="selectedRoleName" class="fw-semibold text-light"></span>
+            </div>
+
+            <h2 class="login-title">Sign In</h2>
+            <p class="login-sub" id="loginSubText">Enter your credentials to continue</p>
+
+            <form asp-controller="Auth" asp-action="Login" method="post" id="loginForm">
                 @Html.AntiForgeryToken()
-                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-                <div class="mb-4">
-                    <label class="form-label text-light fw-semibold">Email Address</label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-transparent border-secondary text-secondary"><i
-                            class="bi bi-envelope"></i></span>
-                            <input type="email" name="email" class="form-control bg-transparent text-light border-secondary"
-                                   placeholder="name@hitec.edu.pk" required />
-                        </div>
+                <input type="hidden" name="role" id="hiddenRole" value="" />
+
+                <div asp-validation-summary="ModelOnly" class="alert-bar mb-3" style="display:@(ViewContext.ModelState.IsValid ? "none" : "block")"></div>
+
+                @if (!ViewContext.ModelState.IsValid)
+                {
+                    <div class="alert-bar mb-3">
+                        <i class="bi bi-exclamation-triangle me-2"></i>Invalid email or password. Please try again.
                     </div>
-                    <div class="mb-4">
-                        <label class="form-label text-light fw-semibold">Password</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-transparent border-secondary text-secondary"><i
-                                class="bi bi-lock"></i></span>
-                                <input type="password" name="password"
-                                       class="form-control bg-transparent text-light border-secondary" placeholder="••••••••"
-                                       required />
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-gradient w-100 py-3 mt-2"><i
-                            class="bi bi-box-arrow-in-right me-2"></i>Sign In</button>
-                        </form>
-                        <div class="text-center mt-4">
-                            <p class="text-secondary mb-0">Don't have an account? <a asp-controller="Auth" asp-action="Register"
-                                                                                         class="text-info fw-semibold text-decoration-none">Register here</a></p>
-                            </div>
-                        </div>
+                }
+
+                <div class="mb-3">
+                    <label class="field-label">Email Address</label>
+                    <div class="field-wrap">
+                        <i class="bi bi-envelope field-icon"></i>
+                        <input type="email" name="email" class="field-input" placeholder="name@hitec.edu.pk" required autofocus />
                     </div>
                 </div>
+
+                <div class="mb-4">
+                    <label class="field-label">Password</label>
+                    <div class="field-wrap">
+                        <i class="bi bi-lock field-icon"></i>
+                        <input type="password" name="password" class="field-input" placeholder="••••••••" required id="pwdInput" />
+                        <button type="button" class="field-eye" onclick="togglePwd()">
+                            <i class="bi bi-eye" id="eyeIcon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-signin" id="selectedRoleColor">
+                    <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
+                </button>
+            </form>
+
+            <p class="login-footer-text mt-3">Don't have an account? <a asp-controller="Auth" asp-action="Register">Register here</a></p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .login-page-wrap {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 1rem;
+    }
+
+    .login-card {
+        background: #141828;
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 20px;
+        padding: 2.5rem 2rem;
+        width: 100%;
+        max-width: 400px;
+        box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+    }
+
+    .login-icon-wrap {
+        width: 60px; height: 60px;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        border-radius: 16px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.6rem; color: #fff;
+        margin: 0 auto 1.4rem;
+    }
+
+    .login-title {
+        font-family: 'Outfit', sans-serif;
+        font-weight: 700; font-size: 1.5rem;
+        color: #f0f0f0; text-align: center; margin-bottom: 0.3rem;
+    }
+
+    .login-sub {
+        text-align: center; color: #64748b; font-size: 0.88rem; margin-bottom: 1.8rem;
+    }
+
+    /* Role list */
+    .role-list { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.5rem; }
+
+    .role-item {
+        display: flex; align-items: center; gap: 1rem;
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 12px;
+        padding: 0.9rem 1rem;
+        cursor: pointer; text-align: left;
+        transition: background 0.2s, border-color 0.2s, transform 0.15s;
+        width: 100%;
+    }
+    .role-item:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); transform: translateX(2px); }
+
+    .role-icon {
+        width: 40px; height: 40px;
+        border-radius: 10px;
+        display: flex; align-items: center; justify-content: center;
+        color: #fff; font-size: 1.1rem; flex-shrink: 0;
+    }
+
+    .role-info { flex: 1; }
+    .role-name { display: block; font-weight: 600; color: #e2e8f0; font-size: 0.92rem; }
+    .role-desc { display: block; font-size: 0.76rem; color: #64748b; }
+    .role-arrow { color: #475569; font-size: 0.8rem; }
+
+    /* Login form step */
+    .back-btn {
+        background: none; border: none; color: #64748b; font-size: 0.85rem;
+        padding: 0; cursor: pointer; margin-bottom: 1.2rem;
+        transition: color 0.2s;
+    }
+    .back-btn:hover { color: #e2e8f0; }
+
+    .selected-role-badge {
+        display: flex; align-items: center; gap: 0.7rem;
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 10px; padding: 0.6rem 0.9rem;
+    }
+    .role-icon-sm {
+        width: 32px; height: 32px; border-radius: 8px;
+        display: flex; align-items: center; justify-content: center;
+        color: #fff; font-size: 0.95rem;
+    }
+
+    .field-label { display: block; color: #94a3b8; font-size: 0.82rem; font-weight: 500; margin-bottom: 0.4rem; }
+
+    .field-wrap {
+        display: flex; align-items: center;
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 10px; overflow: hidden;
+        transition: border-color 0.2s;
+    }
+    .field-wrap:focus-within { border-color: #6366f1; }
+
+    .field-icon { padding: 0 0.8rem; color: #475569; font-size: 0.95rem; }
+
+    .field-input {
+        flex: 1; background: transparent; border: none; outline: none;
+        color: #e2e8f0; padding: 0.75rem 0.4rem 0.75rem 0;
+        font-size: 0.9rem;
+    }
+    .field-input::placeholder { color: #334155; }
+
+    .field-eye {
+        background: none; border: none; color: #475569;
+        padding: 0 0.8rem; cursor: pointer; font-size: 0.95rem;
+        transition: color 0.2s;
+    }
+    .field-eye:hover { color: #94a3b8; }
+
+    .btn-signin {
+        width: 100%; padding: 0.85rem;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: #fff; border: none; border-radius: 10px;
+        font-weight: 600; font-size: 0.95rem;
+        cursor: pointer; transition: opacity 0.2s, transform 0.2s;
+    }
+    .btn-signin:hover { opacity: 0.9; transform: translateY(-1px); }
+
+    .alert-bar {
+        background: rgba(239,68,68,0.12);
+        border: 1px solid rgba(239,68,68,0.25);
+        border-radius: 10px; padding: 0.7rem 1rem;
+        color: #fca5a5; font-size: 0.85rem;
+    }
+
+    .login-footer-text { text-align: center; color: #475569; font-size: 0.82rem; margin-bottom: 0; }
+    .login-footer-text a { color: #6366f1; text-decoration: none; font-weight: 600; }
+    .login-footer-text a:hover { color: #a5b4fc; }
+
+    /* Animation */
+    .slide-in { animation: slideIn 0.25s ease; }
+    @@keyframes slideIn {
+        from { opacity: 0; transform: translateX(20px); }
+        to   { opacity: 1; transform: translateX(0); }
+    }
+</style>
+
+<script>
+    var currentColor = '#6366f1';
+
+    function selectRole(role, iconClass, color, desc) {
+        currentColor = color;
+
+        // Set hidden role field
+        document.getElementById('hiddenRole').value = role;
+
+        // Update badge
+        document.getElementById('selectedRoleName').textContent = role;
+        document.getElementById('selectedRoleIconClass').className = 'bi ' + iconClass;
+        document.getElementById('selectedRoleIcon').style.background = color;
+        document.getElementById('loginSubText').textContent = 'Enter your ' + role.toLowerCase() + ' credentials to continue';
+
+        // Color the sign in button
+        document.getElementById('selectedRoleColor').style.background = 'linear-gradient(135deg, ' + color + ', ' + color + 'cc)';
+
+        // Switch steps
+        document.getElementById('step-role').style.display = 'none';
+        var loginStep = document.getElementById('step-login');
+        loginStep.style.display = 'block';
+        loginStep.classList.add('slide-in');
+
+        // Focus email
+        setTimeout(function() {
+            loginStep.querySelector('input[type="email"]').focus();
+        }, 100);
+    }
+
+    function goBack() {
+        document.getElementById('step-login').style.display = 'none';
+        document.getElementById('step-role').style.display = 'block';
+    }
+
+    function togglePwd() {
+        var pwd = document.getElementById('pwdInput');
+        var icon = document.getElementById('eyeIcon');
+        if (pwd.type === 'password') {
+            pwd.type = 'text';
+            icon.className = 'bi bi-eye-slash';
+        } else {
+            pwd.type = 'password';
+            icon.className = 'bi bi-eye';
+        }
+    }
+
+    // If there's a validation error, stay on login step
+    @if (!ViewContext.ModelState.IsValid)
+    {
+        <text>
+        document.getElementById('step-role').style.display = 'none';
+        document.getElementById('step-login').style.display = 'block';
+        </text>
+    }
+</script>

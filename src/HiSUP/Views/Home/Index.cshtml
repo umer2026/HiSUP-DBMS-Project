@@ -1,91 +1,426 @@
 @{
-    ViewData["Title"] = "Home";
+    ViewData["Title"] = "HITEC Smart University Portal — HiSUP";
 }
 
-<div class="row align-items-center justify-content-center" style="min-height: 80vh;">
-    <div class="col-lg-8 text-center">
-        <div class="mb-4 fade-in">
-            <span style="font-size: 5rem; background: linear-gradient(135deg,#6366f1,#ec4899); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">
-                <i class="bi bi-mortarboard-fill"></i>
-            </span>
+<!-- ========== HERO SECTION ========== -->
+<section class="hero-section">
+    <div class="hero-content text-center">
+        <div class="hero-badge mb-4">
+            <span>🚀 HiSUP v2.0 — HITEC Smart University Portal</span>
         </div>
-        <h1 class="fw-bold mb-2 fade-in" style="font-family:'Outfit',sans-serif; font-size: 3rem;">
-            HITEC Smart University Portal
+        <h1 class="hero-title">
+            HITEC <span class="text-gradient">Smart University</span><br />Portal
         </h1>
-        <p class="text-muted mb-5 fs-5 fade-in">Your all-in-one academic management system — academics, finance, library, and more.</p>
+        <p class="hero-subtitle">
+            A unified digital ecosystem connecting students, <span class="text-info">faculty</span>, administration, <span class="text-info">and library</span><br />
+            services in one seamless, intelligent platform.
+        </p>
+        <div class="hero-actions d-flex gap-3 justify-content-center flex-wrap mb-5">
+            @if (!User.Identity!.IsAuthenticated)
+            {
+                <a asp-controller="Auth" asp-action="Login" class="btn btn-gradient-hero px-4 py-2 fw-semibold">
+                    Get Started <i class="bi bi-arrow-right ms-1"></i>
+                </a>
+                <a asp-controller="Auth" asp-action="Register" class="btn btn-outline-hero px-4 py-2 fw-semibold">
+                    Apply Now <i class="bi bi-arrow-right ms-1"></i>
+                </a>
+                <a href="#about" class="btn btn-ghost-hero px-4 py-2 fw-semibold">
+                    Learn More <i class="bi bi-arrow-right ms-1"></i>
+                </a>
+            }
+            else
+            {
+                <a href="#portals" class="btn btn-gradient-hero px-4 py-2 fw-semibold">
+                    My Portal <i class="bi bi-arrow-right ms-1"></i>
+                </a>
+            }
+        </div>
+        <div class="hero-tags d-flex gap-3 justify-content-center flex-wrap">
+            <span class="hero-tag"><i class="bi bi-book me-1"></i>Digital Library</span>
+            <span class="hero-tag"><i class="bi bi-wallet2 me-1"></i>Fee Management</span>
+            <span class="hero-tag"><i class="bi bi-calendar-check me-1"></i>Attendance Tracking</span>
+            <span class="hero-tag"><i class="bi bi-bar-chart-line me-1"></i>Analytics Dashboard</span>
+            <span class="hero-tag"><i class="bi bi-globe2 me-1"></i>Smart Campus</span>
+        </div>
+    </div>
+</section>
 
-        @if (!User.Identity.IsAuthenticated)
-        {
-            <div class="d-flex gap-3 justify-content-center fade-in">
-                <a asp-controller="Auth" asp-action="Login" class="btn btn-gradient px-5 py-3 fw-bold fs-5">
-                    <i class="bi bi-box-arrow-in-right me-2"></i>Login to Portal
-                </a>
-                <a asp-controller="Auth" asp-action="Register" class="btn btn-outline-secondary px-5 py-3 fw-bold fs-5">
-                    <i class="bi bi-person-plus me-2"></i>Register
-                </a>
-            </div>
-        }
-        else
-        {
-            <div class="row g-4 justify-content-center mt-2 fade-in">
-                @if (User.IsInRole("Admin"))
-                {
-                    <div class="col-md-3">
-                        <a asp-controller="Admin" asp-action="Index" class="text-decoration-none">
-                            <div class="glass-card p-4 text-center">
-                                <i class="bi bi-shield-lock-fill fs-1 text-primary mb-3 d-block"></i>
-                                <h5 class="fw-bold">Admin Panel</h5>
-                                <p class="text-muted small mb-0">Manage students &amp; audit logs</p>
-                            </div>
-                        </a>
+<!-- ========== ABOUT SECTION ========== -->
+<section id="about" class="content-section">
+    <div class="container-xl">
+        <div class="text-center mb-5">
+            <h2 class="section-title">About <span class="text-gradient">HITEC University</span></h2>
+            <p class="section-subtitle">
+                Located in the historic city of Taxila — one of the world's oldest centers of learning — HITEC University
+                stands at the intersection of a rich intellectual heritage and a dynamic industrial ecosystem. Our close
+                association with Heavy Industries Taxila (HIT) provides a distinctive advantage, integrating academic
+                knowledge with industrial expertise and technological innovation.
+            </p>
+        </div>
+
+        <!-- Quick Stats Grid -->
+        <div class="row g-3 mb-5">
+            @{
+                var quickStats = new[] {
+                    new { Icon = "bi-house-fill", Value = "6,308+", Label = "Full-time Students" },
+                    new { Icon = "bi-person-fill", Value = "2,329+", Label = "Registered Students" },
+                    new { Icon = "bi-grid-fill", Value = "28+", Label = "Academic Programs" },
+                    new { Icon = "bi-person-badge-fill", Value = "123+", Label = "Faculty Members" },
+                    new { Icon = "bi-cash-stack", Value = "197.2M", Label = "Scholarship Fund" },
+                    new { Icon = "bi-people-fill", Value = "15+", Label = "Research Centers" }
+                };
+            }
+            @foreach (var stat in quickStats)
+            {
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="stat-card text-center">
+                        <div class="stat-icon mb-2"><i class="bi @stat.Icon"></i></div>
+                        <div class="stat-value">@stat.Value</div>
+                        <div class="stat-label">@stat.Label</div>
                     </div>
-                }
-                @if (User.IsInRole("Student"))
-                {
-                    <div class="col-md-3">
-                        <a asp-controller="Student" asp-action="Index" class="text-decoration-none">
-                            <div class="glass-card p-4 text-center">
-                                <i class="bi bi-person-circle fs-1 text-info mb-3 d-block"></i>
-                                <h5 class="fw-bold">Student Portal</h5>
-                                <p class="text-muted small mb-0">Courses, payments &amp; transcript</p>
-                            </div>
-                        </a>
-                    </div>
-                }
-                @if (User.IsInRole("Faculty"))
-                {
-                    <div class="col-md-3">
-                        <a asp-controller="Faculty" asp-action="Index" class="text-decoration-none">
-                            <div class="glass-card p-4 text-center">
-                                <i class="bi bi-person-workspace fs-1 text-success mb-3 d-block"></i>
-                                <h5 class="fw-bold">Faculty Portal</h5>
-                                <p class="text-muted small mb-0">Attendance &amp; grade entry</p>
-                            </div>
-                        </a>
-                    </div>
-                }
-                @if (User.IsInRole("Finance"))
-                {
-                    <div class="col-md-3">
-                        <a asp-controller="Finance" asp-action="Index" class="text-decoration-none">
-                            <div class="glass-card p-4 text-center">
-                                <i class="bi bi-cash-stack fs-1 text-warning mb-3 d-block"></i>
-                                <h5 class="fw-bold">Finance Portal</h5>
-                                <p class="text-muted small mb-0">Payments &amp; defaulters</p>
-                            </div>
-                        </a>
-                    </div>
-                }
-                <div class="col-md-3">
-                    <a asp-controller="Library" asp-action="Index" class="text-decoration-none">
-                        <div class="glass-card p-4 text-center">
-                            <i class="bi bi-book-fill fs-1 text-danger mb-3 d-block"></i>
-                            <h5 class="fw-bold">Library</h5>
-                            <p class="text-muted small mb-0">Search catalog &amp; issues</p>
-                        </div>
-                    </a>
+                </div>
+            }
+        </div>
+
+        <!-- Vision / Mission -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-6">
+                <div class="vision-card">
+                    <div class="vision-icon"><i class="bi bi-eye-fill"></i></div>
+                    <h4 class="fw-bold text-light mt-3 mb-2">Our Vision</h4>
+                    <p class="text-secondary mb-0">To be a premier institution to achieve academic excellence, innovative solutions in collaboration with industry for sustainable development and socio-economic growth with gender equality.</p>
                 </div>
             </div>
-        }
+            <div class="col-md-6">
+                <div class="mission-card">
+                    <div class="vision-icon teal"><i class="bi bi-flag-fill"></i></div>
+                    <h4 class="fw-bold text-light mt-3 mb-2">Our Mission</h4>
+                    <p class="text-secondary mb-0">To impart quality education by equipping students with knowledge, research, creativity and entrepreneurial skills to compete in the local and global market while remaining cognizant of their social and moral responsibility.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Counter Row -->
+        <div class="row g-3 mb-2">
+            @{
+                var counters = new[] {
+                    new { Value = "123", Label = "Teachers" },
+                    new { Value = "6,308", Label = "Full-time Students" },
+                    new { Value = "28", Label = "Offered Programs" },
+                    new { Value = "2,329", Label = "Registered Students" }
+                };
+            }
+            @foreach (var c in counters)
+            {
+                <div class="col-6 col-md-3">
+                    <div class="counter-card">
+                        <div class="counter-value">@c.Value</div>
+                        <div class="counter-label">@c.Label</div>
+                    </div>
+                </div>
+            }
+        </div>
     </div>
-</div>
+</section>
+
+<!-- ========== DEPARTMENTS SECTION ========== -->
+<section class="content-section">
+    <div class="container-xl">
+        <div class="text-center mb-5">
+            <h2 class="section-title">Our <span class="text-gradient">Departments</span></h2>
+            <p class="section-subtitle">HITEC University offers a wide range of programs across engineering, sciences, and management.</p>
+        </div>
+        <div class="row g-3">
+            @{
+                var departments = new[] {
+                    new { Icon = "bi-lightning-fill", Color = "#6366f1", Name = "Mechanical Engineering" },
+                    new { Icon = "bi-plug-fill", Color = "#22c55e", Name = "Electrical Engineering" },
+                    new { Icon = "bi-cpu-fill", Color = "#a855f7", Name = "Computer Science" },
+                    new { Icon = "bi-building-fill", Color = "#14b8a6", Name = "Civil Engineering" },
+                    new { Icon = "bi-heart-pulse-fill", Color = "#ef4444", Name = "Biomedical Engineering" },
+                    new { Icon = "bi-gear-wide-connected", Color = "#3b82f6", Name = "Computer Engineering" },
+                    new { Icon = "bi-briefcase-fill", Color = "#f59e0b", Name = "Business Administration" },
+                    new { Icon = "bi-calculator-fill", Color = "#10b981", Name = "Mathematics" }
+                };
+            }
+            @foreach (var dept in departments)
+            {
+                <div class="col-6 col-md-3">
+                    <div class="dept-card">
+                        <div class="dept-icon" style="background: @(dept.Color)22; color: @dept.Color;">
+                            <i class="bi @dept.Icon"></i>
+                        </div>
+                        <span class="dept-name">@dept.Name</span>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- ========== PORTALS SECTION ========== -->
+<section id="portals" class="content-section">
+    <div class="container-xl">
+        <div class="text-center mb-5">
+            <h2 class="section-title">Choose Your <span class="text-gradient">Gateway</span></h2>
+            <p class="section-subtitle">Select your role to access your personalized dashboard and tools.</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="portal-card">
+                    <div class="portal-icon" style="background: #6366f122; color: #6366f1;"><i class="bi bi-shield-lock-fill"></i></div>
+                    <h5 class="portal-title">Admin Portal</h5>
+                    <p class="portal-desc">System oversight, user management, course approvals & analytics.</p>
+                    <a asp-controller="Admin" asp-action="Index" class="portal-link">Enter Portal <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="portal-card">
+                    <div class="portal-icon" style="background: #3b82f622; color: #3b82f6;"><i class="bi bi-person-circle"></i></div>
+                    <h5 class="portal-title">Student Portal</h5>
+                    <p class="portal-desc">Courses, grades, fee management & library access.</p>
+                    <a asp-controller="Student" asp-action="Index" class="portal-link">Enter Portal <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="portal-card">
+                    <div class="portal-icon" style="background: #22c55e22; color: #22c55e;"><i class="bi bi-person-workspace"></i></div>
+                    <h5 class="portal-title">Faculty Portal</h5>
+                    <p class="portal-desc">Timetable management, grading & attendance tracking.</p>
+                    <a asp-controller="Faculty" asp-action="Index" class="portal-link">Enter Portal <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="portal-card">
+                    <div class="portal-icon" style="background: #f59e0b22; color: #f59e0b;"><i class="bi bi-book-fill"></i></div>
+                    <h5 class="portal-title">Librarian Portal</h5>
+                    <p class="portal-desc">Inventory management, circulation & fine tracking.</p>
+                    <a asp-controller="Library" asp-action="Index" class="portal-link">Enter Portal <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========== CTA SECTION ========== -->
+<section class="content-section">
+    <div class="container-xl">
+        <div class="cta-card text-center">
+            <h2 class="fw-bold text-light mb-3" style="font-family:'Outfit',sans-serif; font-size:2rem;">Ready to Get Started?</h2>
+            <p class="text-secondary mb-4">Join thousands of students, faculty, and staff who use HiSUP to manage their university experience.</p>
+            <a asp-controller="Auth" asp-action="Login" class="btn btn-gradient-hero px-5 py-2 fw-semibold">
+                Sign In <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ========== CONTACT SECTION ========== -->
+<section class="content-section" id="contact">
+    <div class="container-xl">
+        <div class="text-center mb-5">
+            <h2 class="section-title">Get In <span class="text-gradient">Touch</span></h2>
+            <p class="section-subtitle">Have questions? Reach out to us.</p>
+        </div>
+        <div class="row g-4 justify-content-center">
+            <div class="col-md-4">
+                <div class="contact-card text-center">
+                    <div class="contact-icon"><i class="bi bi-geo-alt-fill"></i></div>
+                    <h6 class="fw-bold text-light mt-3 mb-1">Address</h6>
+                    <p class="text-secondary small mb-0">HITEC University, Taxila Cantt,<br />Rawalpindi, Punjab 47080, Pakistan</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="contact-card text-center">
+                    <div class="contact-icon"><i class="bi bi-telephone-fill"></i></div>
+                    <h6 class="fw-bold text-light mt-3 mb-1">Phone</h6>
+                    <p class="text-secondary small mb-0">+92-51-4908500-18</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="contact-card text-center">
+                    <div class="contact-icon"><i class="bi bi-envelope-fill"></i></div>
+                    <h6 class="fw-bold text-light mt-3 mb-1">Email</h6>
+                    <p class="text-secondary small mb-0">info@hitecuni.edu.pk</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* ---- Hero ---- */
+    .hero-section {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 6rem 1rem 4rem;
+        position: relative;
+        overflow: hidden;
+    }
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        width: 600px; height: 600px;
+        background: radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%);
+        top: 10%; left: 50%;
+        transform: translateX(-50%);
+        pointer-events: none;
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; }
+    .hero-badge {
+        display: inline-block;
+        background: rgba(99,102,241,0.15);
+        border: 1px solid rgba(99,102,241,0.3);
+        border-radius: 50px;
+        padding: 0.4rem 1.2rem;
+        font-size: 0.82rem;
+        color: #a5b4fc;
+    }
+    .hero-title {
+        font-family: 'Outfit', sans-serif;
+        font-size: clamp(2.5rem, 6vw, 4rem);
+        font-weight: 800;
+        color: #f0f0f0;
+        line-height: 1.1;
+        margin-bottom: 1.2rem;
+    }
+    .text-gradient {
+        background: linear-gradient(135deg, #6366f1, #8b5cf6, #3b82f6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    .hero-subtitle {
+        font-size: 1.05rem;
+        color: #94a3b8;
+        line-height: 1.7;
+        margin-bottom: 2.5rem;
+    }
+    .btn-gradient-hero {
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        font-size: 0.95rem;
+    }
+    .btn-gradient-hero:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(99,102,241,0.4); color: #fff; }
+    .btn-outline-hero {
+        background: transparent;
+        color: #e2e8f0;
+        border: 1px solid rgba(255,255,255,0.2);
+        border-radius: 8px;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+    }
+    .btn-outline-hero:hover { background: rgba(255,255,255,0.08); color: #fff; }
+    .btn-ghost-hero {
+        background: transparent;
+        color: #94a3b8;
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 8px;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+    }
+    .btn-ghost-hero:hover { color: #e2e8f0; border-color: rgba(255,255,255,0.2); }
+    .hero-tag {
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 50px;
+        padding: 0.3rem 0.9rem;
+        font-size: 0.8rem;
+        color: #94a3b8;
+    }
+
+    /* ---- Sections ---- */
+    .content-section { padding: 5rem 1rem; }
+    .section-title { font-family: 'Outfit', sans-serif; font-size: 2rem; font-weight: 700; color: #f0f0f0; margin-bottom: 1rem; }
+    .section-subtitle { color: #64748b; max-width: 580px; margin: 0 auto; font-size: 0.95rem; line-height: 1.7; }
+
+    /* ---- Stat Cards ---- */
+    .stat-card {
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(255,255,255,0.07);
+        border-radius: 12px;
+        padding: 1.2rem 0.8rem;
+        transition: transform 0.2s;
+    }
+    .stat-card:hover { transform: translateY(-3px); }
+    .stat-icon { font-size: 1.4rem; color: #6366f1; }
+    .stat-value { font-size: 1.3rem; font-weight: 700; color: #f0f0f0; font-family: 'Outfit', sans-serif; }
+    .stat-label { font-size: 0.72rem; color: #64748b; }
+
+    /* ---- Vision/Mission ---- */
+    .vision-card, .mission-card {
+        background: rgba(99,102,241,0.06);
+        border: 1px solid rgba(99,102,241,0.15);
+        border-radius: 14px;
+        padding: 1.8rem;
+        height: 100%;
+    }
+    .mission-card { background: rgba(20,184,166,0.06); border-color: rgba(20,184,166,0.15); }
+    .vision-icon { font-size: 1.5rem; color: #6366f1; }
+    .vision-icon.teal { color: #14b8a6; }
+
+    /* ---- Counter ---- */
+    .counter-card {
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(255,255,255,0.07);
+        border-radius: 12px;
+        padding: 1.5rem 1rem;
+    }
+    .counter-value { font-family: 'Outfit', sans-serif; font-size: 2rem; font-weight: 700; color: #f0f0f0; }
+    .counter-label { font-size: 0.78rem; color: #64748b; }
+
+    /* ---- Department ---- */
+    .dept-card {
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(255,255,255,0.07);
+        border-radius: 12px;
+        padding: 1.2rem;
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        transition: border-color 0.2s, transform 0.2s;
+        cursor: default;
+    }
+    .dept-card:hover { border-color: rgba(99,102,241,0.3); transform: translateY(-2px); }
+    .dept-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+    .dept-name { font-size: 0.85rem; color: #cbd5e1; font-weight: 500; }
+
+    /* ---- Portal Cards ---- */
+    .portal-card {
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(255,255,255,0.07);
+        border-radius: 16px;
+        padding: 1.8rem;
+        height: 100%;
+        transition: border-color 0.2s, transform 0.2s;
+    }
+    .portal-card:hover { transform: translateY(-4px); border-color: rgba(99,102,241,0.3); }
+    .portal-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 1rem; }
+    .portal-title { font-weight: 700; color: #f0f0f0; font-size: 1rem; margin-bottom: 0.5rem; }
+    .portal-desc { font-size: 0.8rem; color: #64748b; line-height: 1.5; margin-bottom: 1rem; }
+    .portal-link { font-size: 0.82rem; color: #6366f1; text-decoration: none; font-weight: 600; transition: gap 0.2s; }
+    .portal-link:hover { color: #a5b4fc; }
+
+    /* ---- CTA ---- */
+    .cta-card {
+        background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(139,92,246,0.05));
+        border: 1px solid rgba(99,102,241,0.2);
+        border-radius: 20px;
+        padding: 4rem 2rem;
+    }
+
+    /* ---- Contact ---- */
+    .contact-card {
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(255,255,255,0.07);
+        border-radius: 14px;
+        padding: 2rem;
+        height: 100%;
+    }
+    .contact-icon { font-size: 1.5rem; color: #6366f1; }
+</style>
