@@ -1,127 +1,135 @@
 @model List<HiSUP.Controllers.StudentSearchResultDto>
 @{
-    ViewData["Title"] = "Manage Students";
+    ViewData["Title"] = "Manage Students — HiSUP";
     var programs = ViewBag.Programs as List<HiSUP.Models.AcademicProgram>;
 }
 
-<div class="row mb-4">
-    <div class="col-12">
-        <h2 class="fw-bold" style="font-family:'Outfit',sans-serif;">
-            <i class="bi bi-people text-info me-2"></i>Manage Students
-        </h2>
-        <p class="text-muted">Injection-safe dynamic search powered by <code>SearchStudentsDynamic</code> stored procedure.</p>
-    </div>
-</div>
+<div class="portal-page">
 
-<!-- Filters -->
-<div class="glass-card p-4 mb-4">
-    <form method="get" asp-action="Students">
-        <div class="row g-3 align-items-end">
-            <div class="col-md-3">
-                <label class="form-label fw-semibold small text-muted">Name / Email</label>
-                <input type="text" name="searchTerm" class="form-control"
-                       placeholder="Search name or email..." value="@Context.Request.Query["searchTerm"]" />
-            </div>
-            <div class="col-md-3">
-                <label class="form-label fw-semibold small text-muted">Program</label>
-                <select name="programId" class="form-select">
-                    <option value="">-- All Programs --</option>
-                    @if (programs != null)
+    <div class="page-header">
+        <span class="section-label">ADMIN / STUDENTS</span>
+        <h1 class="page-title">Manage Students</h1>
+        <p style="font-size:14px; color:var(--clr-muted); margin-top:4px;">
+            Injection-safe dynamic search powered by <span class="mono">SearchStudentsDynamic</span> stored procedure.
+        </p>
+    </div>
+
+    <div class="page-body">
+
+        <!-- Search Filters -->
+        <div class="filter-panel mb-4">
+            <form method="get" asp-action="Students" id="studentSearchForm">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-3">
+                        <label class="form-label" for="searchTerm">Name / Email</label>
+                        <input type="text" name="searchTerm" id="searchTerm"
+                               class="form-input"
+                               placeholder="Search name or email..."
+                               value="@Context.Request.Query["searchTerm"]" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label" for="programId">Program</label>
+                        <select name="programId" id="programId" class="form-select">
+                            <option value="">— All Programs —</option>
+                            @if (programs != null)
+                            {
+                                foreach (var prog in programs)
+                                {
+                                    <option value="@prog.ProgramID"
+                                            selected="@(Context.Request.Query["programId"] == prog.ProgramID.ToString())">
+                                        @prog.ProgramName
+                                    </option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label" for="minCGPA">Min CGPA</label>
+                        <input type="number" name="minCGPA" id="minCGPA"
+                               step="0.01" min="0" max="4"
+                               class="form-input"
+                               placeholder="0.00"
+                               value="@Context.Request.Query["minCGPA"]" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label" for="status">Status</label>
+                        <select name="status" id="status" class="form-select">
+                            <option value="">— All —</option>
+                            <option value="Active" selected="@(Context.Request.Query["status"] == "Active")">Active</option>
+                            <option value="Suspended" selected="@(Context.Request.Query["status"] == "Suspended")">Suspended</option>
+                            <option value="Graduated" selected="@(Context.Request.Query["status"] == "Graduated")">Graduated</option>
+                            <option value="Withdrawn" selected="@(Context.Request.Query["status"] == "Withdrawn")">Withdrawn</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn-primary-yellow w-100" id="searchStudentsBtn">
+                            Search
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Results Table -->
+        <div class="portal-table-wrap">
+            <div class="portal-table-head">
+                <span class="portal-table-head-title">
+                    Search Results
+                    @if (Model != null)
                     {
-                        foreach (var prog in programs)
-                        {
-                            <option value="@prog.ProgramID"
-                                    selected="@(Context.Request.Query["programId"] == prog.ProgramID.ToString())">
-                                @prog.ProgramName
-                            </option>
-                        }
+                        <span class="badge-role ms-2" style="font-size:10px;">@Model.Count RECORDS</span>
                     }
-                </select>
+                </span>
             </div>
-            <div class="col-md-2">
-                <label class="form-label fw-semibold small text-muted">Min CGPA</label>
-                <input type="number" name="minCGPA" step="0.01" min="0" max="4"
-                       class="form-control" placeholder="0.00"
-                       value="@Context.Request.Query["minCGPA"]" />
-            </div>
-            <div class="col-md-2">
-                <label class="form-label fw-semibold small text-muted">Status</label>
-                <select name="status" class="form-select">
-                    <option value="">-- All --</option>
-                    <option value="Active" selected="@(Context.Request.Query["status"]=="Active")">Active</option>
-                    <option value="Suspended" selected="@(Context.Request.Query["status"]=="Suspended")">Suspended</option>
-                    <option value="Graduated" selected="@(Context.Request.Query["status"]=="Graduated")">Graduated</option>
-                    <option value="Withdrawn" selected="@(Context.Request.Query["status"]=="Withdrawn")">Withdrawn</option>
-                </select>
-            </div>
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-gradient w-100">
-                    <i class="bi bi-search me-1"></i>Search
-                </button>
+            <div class="table-responsive">
+                <table class="portal-table" id="studentsTable">
+                    <thead>
+                        <tr>
+                            <th style="padding-left:24px;">#</th>
+                            <th>Student Name</th>
+                            <th>Email</th>
+                            <th>Program</th>
+                            <th>CGPA</th>
+                            <th style="text-align:right; padding-right:24px;">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model == null || !Model.Any())
+                        {
+                            <tr>
+                                <td colspan="6" style="text-align:center; padding:48px 16px; color:var(--clr-muted);">
+                                    <div style="font-size:13px;">No students match the search criteria.</div>
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            foreach (var s in Model)
+                            {
+                                <tr>
+                                    <td style="padding-left:24px;" class="mono" style="color:var(--clr-muted);">@s.StudentID</td>
+                                    <td>
+                                        <span style="font-weight:600; color:var(--clr-white);">@s.FirstName @s.LastName</span>
+                                    </td>
+                                    <td class="mono" style="font-size:13px; color:var(--clr-muted);">@s.Email</td>
+                                    <td>
+                                        <span class="badge-role" style="font-size:9px;">P@s.ProgramID</span>
+                                    </td>
+                                    <td style="font-weight:700; color:var(--clr-yellow); font-family:var(--font-mono);">
+                                        @s.CGPA.ToString("0.00")
+                                    </td>
+                                    <td style="text-align:right; padding-right:24px;">
+                                        <span class="status-badge @(s.Status == "Active" ? "status-active" : s.Status == "Graduated" ? "status-warning" : "status-inactive")">
+                                            @s.Status
+                                        </span>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
             </div>
         </div>
-    </form>
-</div>
 
-<!-- Results -->
-<div class="glass-card p-0 overflow-hidden">
-    <div class="p-4 border-bottom border-secondary border-opacity-25">
-        <h5 class="fw-bold mb-0">
-            <i class="bi bi-table me-2 text-info"></i>Results
-            @if (Model != null)
-            {
-                <span class="badge bg-primary ms-2">@Model.Count records</span>
-            }
-        </h5>
-    </div>
-    <div class="table-responsive">
-        <table class="table table-dark table-hover mb-0 align-middle">
-            <thead>
-                <tr>
-                    <th class="ps-4">#</th>
-                    <th>Student Name</th>
-                    <th>Email</th>
-                    <th>Program</th>
-                    <th>CGPA</th>
-                    <th class="pe-4 text-end">Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (Model == null || !Model.Any())
-                {
-                    <tr>
-                        <td colspan="6" class="text-center text-secondary py-5">
-                            <i class="bi bi-search fs-2 d-block mb-2 opacity-30"></i>
-                            No students match the search criteria.
-                        </td>
-                    </tr>
-                }
-                else
-                {
-                    foreach (var s in Model)
-                    {
-                        <tr>
-                            <td class="ps-4 text-muted">@s.StudentID</td>
-                            <td>
-                                <span class="d-flex align-items-center gap-2">
-                                    <div class="bg-primary bg-opacity-25 text-primary rounded-circle d-flex align-items-center justify-content-center" style="width:32px;height:32px;">
-                                        <i class="bi bi-person-fill"></i>
-                                    </div>
-                                    <span class="fw-semibold text-light">@s.FirstName @s.LastName</span>
-                                </span>
-                            </td>
-                            <td class="text-muted">@s.Email</td>
-                            <td><span class="badge bg-secondary bg-opacity-50">@s.ProgramID</span></td>
-                            <td class="text-info fw-bold">@s.CGPA.ToString("0.00")</td>
-                            <td class="pe-4 text-end">
-                                <span class="badge @(s.Status == "Active" ? "bg-success" : s.Status == "Graduated" ? "bg-info" : "bg-warning text-dark")">
-                                    @s.Status
-                                </span>
-                            </td>
-                        </tr>
-                    }
-                }
-            </tbody>
-        </table>
     </div>
 </div>

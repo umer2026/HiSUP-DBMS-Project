@@ -1,77 +1,98 @@
 @model List<HiSUP.Models.Section>
 @{
-    ViewData["Title"] = "Course Registration";
+    ViewData["Title"] = "Course Registration — HiSUP";
 }
-<div class="row mb-4">
-    <div class="col-md-12">
-        <h2 class="fw-bold" style="font-family: 'Outfit', sans-serif;"><i
-            class="bi bi-journal-plus me-2 text-primary"></i>Course Registration</h2>
-            <p class="text-muted">Enroll in available sections for the current academic semester.</p>
-        </div>
+
+<div class="portal-page">
+
+    <div class="page-header">
+        <span class="section-label">STUDENT / REGISTRATION</span>
+        <h1 class="page-title">Course Registration</h1>
+        <p style="font-size:14px; color:var(--clr-muted); margin-top:4px;">
+            Enroll in available sections for the current academic semester.
+        </p>
     </div>
-    <div class="card glass-card p-4">
-        <div class="table-responsive">
-            <table class="table table-dark table-hover border-secondary align-middle">
-                <thead>
-                    <tr>
-                        <th>Course Code</th>
-                        <th>Course Title</th>
-                        <th>Credits</th>
-                        <th>Section</th>
-                        <th>Faculty</th>
-                        <th>Room</th>
-                        <th>Seats Available</th>
-                        <th class="text-end">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (Model == null || !Model.Any())
-                    {
+
+    <div class="page-body">
+        <div class="portal-table-wrap">
+            <div class="portal-table-head">
+                <span class="portal-table-head-title">Available Sections</span>
+                @if (Model != null)
+                {
+                    <span class="badge-role">@Model.Count SECTIONS</span>
+                }
+            </div>
+            <div class="table-responsive">
+                <table class="portal-table" id="courseRegTable">
+                    <thead>
                         <tr>
-                            <td colspan="8" class="text-center text-secondary py-4">No sections available for registration.</td>
+                            <th style="padding-left:24px;">Course Code</th>
+                            <th>Course Title</th>
+                            <th>Credits</th>
+                            <th>Section</th>
+                            <th>Faculty</th>
+                            <th>Room</th>
+                            <th>Seats</th>
+                            <th style="text-align:right; padding-right:24px;">Action</th>
                         </tr>
-                    }
-                    else
-                    {
-                        foreach (var sec in Model)
+                    </thead>
+                    <tbody>
+                        @if (Model == null || !Model.Any())
                         {
-                            var seatsLeft = sec.Capacity - sec.EnrolledCount;
                             <tr>
-                                <td><span class="badge bg-secondary">@sec.Course.CourseCode</span></td>
-                                <td class="fw-semibold text-light">@sec.Course.CourseTitle</td>
-                                <td>@sec.Course.Credits</td>
-                                <td>@sec.SectionName</td>
-                                <td>@(sec.Faculty != null ? $"{sec.Faculty.FirstName} {sec.Faculty.LastName}" : "TBD")
-                                </td>
-                                <td>@sec.RoomNo</td>
-                                <td>
-                                    @if (seatsLeft > 0)
-                                    {
-                                        <span class="text-success">@seatsLeft / @sec.Capacity seats left</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-danger">Full</span>
-                                    }
-                                </td>
-                                <td class="text-end">
-                                    @if (seatsLeft > 0)
-                                    {
-                                        <form asp-action="Enroll" method="post">
-                                            @Html.AntiForgeryToken()
-                                            <input type="hidden" name="sectionId" value="@sec.SectionID" />
-                                            <button type="submit" class="btn btn-gradient btn-sm">Enroll</button>
-                                        </form>
-                                    }
-                                    else
-                                    {
-                                        <button class="btn btn-secondary btn-sm" disabled>Full</button>
-                                    }
+                                <td colspan="8" style="text-align:center; padding:48px 16px; color:var(--clr-muted); font-size:13px;">
+                                    No sections available for registration.
                                 </td>
                             </tr>
                         }
-                    }
-                </tbody>
-            </table>
+                        else
+                        {
+                            foreach (var sec in Model)
+                            {
+                                var seatsLeft = sec.Capacity - sec.EnrolledCount;
+                                <tr>
+                                    <td style="padding-left:24px;">
+                                        <span class="badge-role" style="font-size:9px;">@sec.Course.CourseCode</span>
+                                    </td>
+                                    <td style="font-weight:600; color:var(--clr-white);">@sec.Course.CourseTitle</td>
+                                    <td class="mono" style="font-size:13px; color:var(--clr-muted);">@sec.Course.Credits</td>
+                                    <td class="mono" style="font-size:12px;">@sec.SectionName</td>
+                                    <td style="font-size:13px; color:var(--clr-muted);">
+                                        @(sec.Faculty != null ? $"{sec.Faculty.FirstName} {sec.Faculty.LastName}" : "TBD")
+                                    </td>
+                                    <td class="mono" style="font-size:12px; color:var(--clr-muted);">@sec.RoomNo</td>
+                                    <td>
+                                        @if (seatsLeft > 0)
+                                        {
+                                            <span class="mono" style="font-size:12px; color:#6fcf6f;">@seatsLeft / @sec.Capacity</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="mono" style="font-size:12px; color:var(--clr-red);">FULL</span>
+                                        }
+                                    </td>
+                                    <td style="text-align:right; padding-right:24px;">
+                                        @if (seatsLeft > 0)
+                                        {
+                                            <form asp-action="Enroll" method="post" style="display:inline;">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="sectionId" value="@sec.SectionID" />
+                                                <button type="submit" class="btn-primary-yellow" style="padding:7px 16px; font-size:12px;">
+                                                    Enroll
+                                                </button>
+                                            </form>
+                                        }
+                                        else
+                                        {
+                                            <button class="btn-ghost" style="padding:7px 16px; font-size:12px; opacity:0.4; cursor:not-allowed;" disabled>Full</button>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
+</div>

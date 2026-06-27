@@ -1,96 +1,102 @@
 @model List<HiSUP.Models.Enrollment>
 @{
-    ViewData["Title"] = "Grade Entry";
+    ViewData["Title"] = "Grade Entry — HiSUP";
     int sectionId = (int)ViewBag.SectionID;
 }
 
-<div class="row mb-4">
-    <div class="col-12">
-        <h2 class="fw-bold" style="font-family:'Outfit',sans-serif;">
-            <i class="bi bi-pencil-square text-warning me-2"></i>Grade Entry — Section #@sectionId
-        </h2>
-        <p class="text-muted">Assign marks. Grades are bulk-merged via <code>ImportBulkGrades</code> stored procedure using a TVP.</p>
+<div class="portal-page">
+
+    <div class="page-header">
+        <span class="section-label">FACULTY / GRADE ENTRY</span>
+        <h1 class="page-title">Grade Entry — Section #@sectionId</h1>
+        <p style="font-size:14px; color:var(--clr-muted); margin-top:4px;">
+            Assign marks. Grades are bulk-merged via <span class="mono">ImportBulkGrades</span> stored procedure using a TVP.
+        </p>
+    </div>
+
+    <div class="page-body">
+        <form method="post" asp-action="SubmitGrades" id="gradeEntryForm">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="sectionId" value="@sectionId" />
+
+            <div class="portal-table-wrap mb-4">
+                <div class="portal-table-head">
+                    <span class="portal-table-head-title">Enrolled Students</span>
+                    @if (Model != null)
+                    {
+                        <span class="badge-role">@Model.Count STUDENTS</span>
+                    }
+                </div>
+                <div class="table-responsive">
+                    <table class="portal-table" id="gradeTable">
+                        <thead>
+                            <tr>
+                                <th style="padding-left:24px;">#</th>
+                                <th>Student Name</th>
+                                <th>Enrollment ID</th>
+                                <th>Current Grade</th>
+                                <th style="padding-right:24px;">Marks (0–100)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model == null || !Model.Any())
+                            {
+                                <tr>
+                                    <td colspan="5" style="text-align:center; padding:48px 16px; color:var(--clr-muted); font-size:13px;">
+                                        No students enrolled in this section.
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {
+                                int idx = 0;
+                                foreach (var e in Model)
+                                {
+                                    idx++;
+                                    <tr>
+                                        <td style="padding-left:24px;" class="mono" style="font-size:12px; color:var(--clr-muted);">@idx</td>
+                                        <td style="font-weight:600; color:var(--clr-white);">
+                                            @e.Student?.FirstName @e.Student?.LastName
+                                        </td>
+                                        <td>
+                                            <input type="hidden" name="gradeList[@(idx-1)].EnrollmentID" value="@e.EnrollmentID" />
+                                            <span class="mono" style="font-size:12px; color:var(--clr-muted);">@e.EnrollmentID</span>
+                                        </td>
+                                        <td>
+                                            @if (e.Grade != null)
+                                            {
+                                                <span class="status-badge status-active">@e.Grade.GradeValue — @e.Grade.Marks pts</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="mono" style="font-size:11px; color:var(--clr-muted);">NOT GRADED</span>
+                                            }
+                                        </td>
+                                        <td style="padding-right:24px; width:180px;">
+                                            <input type="number"
+                                                   name="gradeList[@(idx-1)].Marks"
+                                                   class="form-input"
+                                                   min="0" max="100" step="1"
+                                                   placeholder="0–100"
+                                                   value="@(e.Grade?.Marks)"
+                                                   style="padding:8px 12px;" />
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div style="display:flex; gap:12px; align-items:center;">
+                <button type="submit" class="btn-primary-yellow" style="padding:12px 28px;" id="submitGradesBtn">
+                    Submit Grades (MERGE)
+                </button>
+                <a asp-action="Index" class="btn-ghost" style="padding:12px 24px;">
+                    &larr; Back to Dashboard
+                </a>
+            </div>
+        </form>
     </div>
 </div>
-
-<form method="post" asp-action="SubmitGrades">
-    @Html.AntiForgeryToken()
-    <input type="hidden" name="sectionId" value="@sectionId" />
-
-    <div class="glass-card p-0 overflow-hidden mb-4">
-        <div class="p-4 border-bottom border-secondary border-opacity-25">
-            <h5 class="fw-bold mb-0">
-                <i class="bi bi-people me-2 text-warning"></i>Enrolled Students
-            </h5>
-        </div>
-        <div class="table-responsive">
-            <table class="table table-dark table-hover mb-0 align-middle">
-                <thead>
-                    <tr>
-                        <th class="ps-4">#</th>
-                        <th>Student Name</th>
-                        <th>Enrollment ID</th>
-                        <th>Current Grade</th>
-                        <th class="pe-4">Marks (0–100)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (Model == null || !Model.Any())
-                    {
-                        <tr>
-                            <td colspan="5" class="text-center py-5 text-secondary">
-                                No students enrolled in this section.
-                            </td>
-                        </tr>
-                    }
-                    else
-                    {
-                        int idx = 0;
-                        foreach (var e in Model)
-                        {
-                            idx++;
-                            <tr>
-                                <td class="ps-4 text-muted">@idx</td>
-                                <td>
-                                    <span class="fw-semibold text-light">
-                                        @e.Student?.FirstName @e.Student?.LastName
-                                    </span>
-                                </td>
-                                <td>
-                                    <input type="hidden" name="gradeList[@(idx-1)].EnrollmentID" value="@e.EnrollmentID" />
-                                    <span class="text-muted">@e.EnrollmentID</span>
-                                </td>
-                                <td>
-                                    @if (e.Grade != null)
-                                    {
-                                        <span class="badge bg-info">@e.Grade.GradeValue — @e.Grade.Marks pts</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-muted small">Not graded</span>
-                                    }
-                                </td>
-                                <td class="pe-4" style="width:200px;">
-                                    <input type="number" name="gradeList[@(idx-1)].Marks"
-                                           class="form-control"
-                                           min="0" max="100" step="1"
-                                           placeholder="Enter marks"
-                                           value="@(e.Grade?.Marks)" />
-                                </td>
-                            </tr>
-                        }
-                    }
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <div class="d-flex gap-3">
-        <button type="submit" class="btn btn-gradient px-5 py-2 fw-bold">
-            <i class="bi bi-cloud-upload me-2"></i>Submit Grades (MERGE)
-        </button>
-        <a asp-action="Index" class="btn btn-outline-secondary px-4 py-2">
-            <i class="bi bi-arrow-left me-1"></i>Back to Dashboard
-        </a>
-    </div>
-</form>

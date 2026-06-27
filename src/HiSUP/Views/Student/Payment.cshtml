@@ -1,115 +1,138 @@
 @model List<HiSUP.Models.FeePayment>
 @{
-    ViewData["Title"] = "Fee Payments";
+    ViewData["Title"] = "Fee Management — HiSUP";
     var structures = ViewBag.FeeStructures as List<HiSUP.Models.FeeStructure>;
 }
-<div class="row mb-4">
-    <div class="col-md-12">
-        <h2 class="fw-bold" style="font-family: 'Outfit', sans-serif;"><i
-            class="bi bi-credit-card me-2 text-warning"></i>Fee Management & Payments</h2>
-            <p class="text-muted">Process your semester tuition fees and review your transaction logs.</p>
-        </div>
+
+<div class="portal-page">
+
+    <div class="page-header">
+        <span class="section-label">STUDENT / PAYMENT</span>
+        <h1 class="page-title">Fee Management &amp; Payments</h1>
+        <p style="font-size:14px; color:var(--clr-muted); margin-top:4px;">
+            Process your semester tuition fees and review transaction logs.
+        </p>
     </div>
-    <div class="row g-4 mb-5">
-        <!-- Payment Form -->
-        <div class="col-md-5">
-            <div class="card glass-card p-4">
-                <h4 class="fw-bold mb-4" style="font-family: 'Outfit', sans-serif;"><i class="bi bi-wallet2 me-2"></i>Make
-                    Payment</h4>
-                    <form asp-action="PayFee" method="post">
+
+    <div class="page-body">
+        <div class="row g-3">
+
+            <!-- Payment Form -->
+            <div class="col-md-5">
+                <div class="card-dark" style="height:100%;">
+                    <span class="stat-card-title">Make Payment</span>
+
+                    <form asp-action="PayFee" method="post" id="feePayForm" style="margin-top:20px;">
                         @Html.AntiForgeryToken()
-                        <div class="mb-3">
-                            <label class="form-label text-light fw-semibold">Select Semester Fee Schedule</label>
-                            <select name="feeStructureId" class="form-select bg-dark text-light border-secondary" required>
+
+                        <div class="form-field">
+                            <label class="form-label" for="feeStructureId">Select Semester Fee Schedule</label>
+                            <select name="feeStructureId" id="feeStructureId" class="form-select" required>
                                 @if (structures != null)
                                 {
                                     foreach (var s in structures)
                                     {
-                                        <option value="@s.FeeStructureID">Semester @s.Semester Fee (Total: Rs.
-                                            @s.TotalAmount.ToString("N0"))</option>
-                                        }
+                                        <option value="@s.FeeStructureID">Semester @s.Semester (Rs. @s.TotalAmount.ToString("N0"))</option>
                                     }
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label text-light fw-semibold">Amount to Pay (Rs.)</label>
-                                <input type="number" name="amount" min="1" step="0.01"
-                                       class="form-control bg-transparent text-light border-secondary" required />
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label text-light fw-semibold">Payment Method</label>
-                                <select name="paymentMethod" class="form-select bg-dark text-light border-secondary" required>
-                                    <option value="Bank Transfer">Bank Transfer</option>
-                                    <option value="Credit Card">Credit Card</option>
-                                    <option value="Cash">Cash</option>
-                                    <option value="Challan">Challan</option>
-                                </select>
-                            </div>
-                            <div class="mb-4">
-                                <label class="form-label text-light fw-semibold">Bank Account / Reference</label>
-                                <input type="text" name="bankAccount"
-                                       class="form-control bg-transparent text-light border-secondary"
-                                       placeholder="PK00-ABCD-0000-0000-0000" required />
-                            </div>
-                            <button type="submit" class="btn btn-gradient w-100 py-3"><i class="bi bi-shield-check me-2"></i>Submit
-                                Payment</button>
-                            </form>
+                                }
+                            </select>
                         </div>
+
+                        <div class="form-field">
+                            <label class="form-label" for="amount">Amount to Pay (Rs.)</label>
+                            <input type="number" name="amount" id="amount"
+                                   min="1" step="0.01"
+                                   class="form-input" required placeholder="0.00" />
+                        </div>
+
+                        <div class="form-field">
+                            <label class="form-label" for="paymentMethod">Payment Method</label>
+                            <select name="paymentMethod" id="paymentMethod" class="form-select" required>
+                                <option value="Bank Transfer">Bank Transfer</option>
+                                <option value="Credit Card">Credit Card</option>
+                                <option value="Cash">Cash</option>
+                                <option value="Challan">Challan</option>
+                            </select>
+                        </div>
+
+                        <div class="form-field">
+                            <label class="form-label" for="bankAccount">Bank Account / Reference</label>
+                            <input type="text" name="bankAccount" id="bankAccount"
+                                   class="form-input mono"
+                                   placeholder="PK00-ABCD-0000-0000-0000" required />
+                        </div>
+
+                        <button type="submit" class="btn-primary-yellow" style="width:100%; padding:13px 20px; font-size:14px;" id="submitPayBtn">
+                            Submit Payment
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Payment History -->
+            <div class="col-md-7">
+                <div class="portal-table-wrap">
+                    <div class="portal-table-head">
+                        <span class="portal-table-head-title">Payment History</span>
+                        @if (Model != null)
+                        {
+                            <span class="badge-role">@Model.Count TRANSACTIONS</span>
+                        }
                     </div>
-                    <!-- Payment History -->
-                    <div class="col-md-7">
-                        <div class="card glass-card p-4 h-100">
-                            <h4 class="fw-bold mb-4" style="font-family: 'Outfit', sans-serif;"><i
-                                class="bi bi-clock-history me-2"></i>Payment History</h4>
-                                <div class="table-responsive">
-                                    <table class="table table-dark table-hover border-secondary align-middle">
-                                        <thead>
-                                            <tr>
-                                                <th>Transaction ID</th>
-                                                <th>Semester</th>
-                                                <th>Amount Paid</th>
-                                                <th>Date</th>
-                                                <th>Method</th>
-                                                <th>Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @if (Model == null || !Model.Any())
-                                            {
-                                                <tr>
-                                                    <td colspan="6" class="text-center text-secondary py-4">No payment logs found.</td>
-                                                </tr>
-                                            }
-                                            else
-                                            {
-                                                foreach (var pay in Model)
+                    <div class="table-responsive">
+                        <table class="portal-table" id="payHistoryTable">
+                            <thead>
+                                <tr>
+                                    <th style="padding-left:24px;">Transaction ID</th>
+                                    <th>Semester</th>
+                                    <th>Amount</th>
+                                    <th>Date</th>
+                                    <th>Method</th>
+                                    <th style="text-align:right; padding-right:24px;">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model == null || !Model.Any())
+                                {
+                                    <tr>
+                                        <td colspan="6" style="text-align:center; padding:48px 16px; color:var(--clr-muted); font-size:13px;">
+                                            No payment records found.
+                                        </td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    foreach (var pay in Model)
+                                    {
+                                        <tr>
+                                            <td style="padding-left:24px;" class="mono" style="font-size:11px; color:var(--clr-muted);">@pay.TransactionID</td>
+                                            <td class="mono" style="font-size:12px; color:var(--clr-muted);">SEM @pay.FeeStructure.Semester</td>
+                                            <td style="font-weight:700; font-family:var(--font-mono); color:var(--clr-yellow);">Rs. @pay.AmountPaid.ToString("N2")</td>
+                                            <td class="mono" style="font-size:12px; color:var(--clr-muted);">@pay.PaymentDate.ToString("yyyy-MM-dd")</td>
+                                            <td style="font-size:13px; color:var(--clr-muted);">@pay.PaymentMethod</td>
+                                            <td style="text-align:right; padding-right:24px;">
+                                                @if (pay.Status == "Approved")
                                                 {
-                                                    <tr>
-                                                        <td><span class="text-info fw-semibold font-monospace">@pay.TransactionID</span></td>
-                                                        <td>Semester @pay.FeeStructure.Semester</td>
-                                                        <td class="text-success fw-bold">Rs. @pay.AmountPaid.ToString("N2")</td>
-                                                        <td>@pay.PaymentDate.ToString("yyyy-MM-dd")</td>
-                                                        <td>@pay.PaymentMethod</td>
-                                                        <td>
-                                                            @if (pay.Status == "Approved")
-                                                            {
-                                                                <span class="badge bg-success">Approved</span>
-                                                            }
-                                                            else if (pay.Status == "Pending")
-                                                            {
-                                                                <span class="badge bg-warning text-dark">Pending</span>
-                                                            }
-                                                            else
-                                                            {
-                                                                <span class="badge bg-danger">Rejected</span>
-                                                            }
-                                                        </td>
-                                                    </tr>
+                                                    <span class="status-badge status-active">Approved</span>
                                                 }
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
+                                                else if (pay.Status == "Pending")
+                                                {
+                                                    <span class="status-badge status-warning">Pending</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="status-badge status-danger">Rejected</span>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
                     </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

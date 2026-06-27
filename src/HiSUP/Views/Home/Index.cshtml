@@ -3,246 +3,206 @@
 }
 
 <!-- ========== HERO SECTION ========== -->
-<section class="hero-section">
-    <div class="hero-content text-center">
-        <div class="hero-badge mb-4">
-            <span>🚀 HiSUP v2.0 — HITEC Smart University Portal</span>
-        </div>
-        <h1 class="hero-title">
-            HITEC <span class="text-gradient">Smart University</span><br />Portal
-        </h1>
-        <p class="hero-subtitle">
-            A unified digital ecosystem connecting students, <span class="text-info">faculty</span>, administration, <span class="text-info">and library</span><br />
-            services in one seamless, intelligent platform.
-        </p>
-        <div class="hero-actions d-flex gap-3 justify-content-center flex-wrap mb-5">
+<section class="landing-hero" id="home">
+    <div class="hero-inner">
+
+        <!-- LEFT: Headline + CTA -->
+        <div class="hero-left">
+            <p class="section-label">HITEC UNIVERSITY · TAXILA</p>
+            <h1 class="hero-headline">
+                <span class="hero-line-1">SMART PORTAL</span>
+                <span class="hero-line-2">FOR HITEC UNIVERSITY</span>
+            </h1>
+            <p class="hero-desc">
+                Manage academics, fees, library, and attendance — all in one place.
+            </p>
             @if (!User.Identity!.IsAuthenticated)
             {
-                <a asp-controller="Auth" asp-action="Login" class="btn btn-gradient-hero px-4 py-2 fw-semibold">
-                    Get Started <i class="bi bi-arrow-right ms-1"></i>
-                </a>
-                <a asp-controller="Auth" asp-action="Register" class="btn btn-outline-hero px-4 py-2 fw-semibold">
-                    Apply Now <i class="bi bi-arrow-right ms-1"></i>
-                </a>
-                <a href="#about" class="btn btn-ghost-hero px-4 py-2 fw-semibold">
-                    Learn More <i class="bi bi-arrow-right ms-1"></i>
+                <a asp-controller="Auth" asp-action="Login" class="hero-cta btn-ghost" id="heroAccessBtn">
+                    Access Portal &rarr;
                 </a>
             }
             else
             {
-                <a href="#portals" class="btn btn-gradient-hero px-4 py-2 fw-semibold">
-                    My Portal <i class="bi bi-arrow-right ms-1"></i>
+                <a href="#portals" class="hero-cta btn-ghost" id="heroPortalBtn">
+                    My Portal &rarr;
                 </a>
             }
         </div>
-        <div class="hero-tags d-flex gap-3 justify-content-center flex-wrap">
-            <span class="hero-tag"><i class="bi bi-book me-1"></i>Digital Library</span>
-            <span class="hero-tag"><i class="bi bi-wallet2 me-1"></i>Fee Management</span>
-            <span class="hero-tag"><i class="bi bi-calendar-check me-1"></i>Attendance Tracking</span>
-            <span class="hero-tag"><i class="bi bi-bar-chart-line me-1"></i>Analytics Dashboard</span>
-            <span class="hero-tag"><i class="bi bi-globe2 me-1"></i>Smart Campus</span>
-        </div>
-    </div>
-</section>
 
-<!-- ========== ABOUT SECTION ========== -->
-<section id="about" class="content-section">
-    <div class="container-xl">
-        <div class="text-center mb-5">
-            <h2 class="section-title">About <span class="text-gradient">HITEC University</span></h2>
-            <p class="section-subtitle">
-                Located in the historic city of Taxila — one of the world's oldest centers of learning — HITEC University
-                stands at the intersection of a rich intellectual heritage and a dynamic industrial ecosystem. Our close
-                association with Heavy Industries Taxila (HIT) provides a distinctive advantage, integrating academic
-                knowledge with industrial expertise and technological innovation.
-            </p>
-        </div>
-
-        <!-- Quick Stats Grid -->
-        <div class="row g-3 mb-5">
-            @{
-                var quickStats = new[] {
-                    new { Icon = "bi-house-fill", Value = "6,308+", Label = "Full-time Students" },
-                    new { Icon = "bi-person-fill", Value = "2,329+", Label = "Registered Students" },
-                    new { Icon = "bi-grid-fill", Value = "28+", Label = "Academic Programs" },
-                    new { Icon = "bi-person-badge-fill", Value = "123+", Label = "Faculty Members" },
-                    new { Icon = "bi-cash-stack", Value = "197.2M", Label = "Scholarship Fund" },
-                    new { Icon = "bi-people-fill", Value = "15+", Label = "Research Centers" }
-                };
-            }
-            @foreach (var stat in quickStats)
-            {
-                <div class="col-6 col-md-4 col-lg-2">
-                    <div class="stat-card text-center">
-                        <div class="stat-icon mb-2"><i class="bi @stat.Icon"></i></div>
-                        <div class="stat-value">@stat.Value</div>
-                        <div class="stat-label">@stat.Label</div>
-                    </div>
+        <!-- RIGHT: System list with yellow left-border -->
+        <div class="hero-right" aria-label="University systems">
+            <div class="hero-system-list">
+                <div class="hero-system-item">
+                    <span class="mono hero-system-label">ACADEMICS</span>
+                    <span class="hero-system-sub">Courses · Grades · Transcripts</span>
                 </div>
-            }
-        </div>
-
-        <!-- Vision / Mission -->
-        <div class="row g-4 mb-5">
-            <div class="col-md-6">
-                <div class="vision-card">
-                    <div class="vision-icon"><i class="bi bi-eye-fill"></i></div>
-                    <h4 class="fw-bold text-light mt-3 mb-2">Our Vision</h4>
-                    <p class="text-secondary mb-0">To be a premier institution to achieve academic excellence, innovative solutions in collaboration with industry for sustainable development and socio-economic growth with gender equality.</p>
+                <div class="hero-system-item">
+                    <span class="mono hero-system-label">FINANCE</span>
+                    <span class="hero-system-sub">Fee Management · Payments · Defaulters</span>
                 </div>
-            </div>
-            <div class="col-md-6">
-                <div class="mission-card">
-                    <div class="vision-icon teal"><i class="bi bi-flag-fill"></i></div>
-                    <h4 class="fw-bold text-light mt-3 mb-2">Our Mission</h4>
-                    <p class="text-secondary mb-0">To impart quality education by equipping students with knowledge, research, creativity and entrepreneurial skills to compete in the local and global market while remaining cognizant of their social and moral responsibility.</p>
+                <div class="hero-system-item">
+                    <span class="mono hero-system-label">LIBRARY</span>
+                    <span class="hero-system-sub">Full-Text Search · Catalog · Circulation</span>
+                </div>
+                <div class="hero-system-item">
+                    <span class="mono hero-system-label">ATTENDANCE</span>
+                    <span class="hero-system-sub">Section-level Tracking · Reports</span>
                 </div>
             </div>
         </div>
 
-        <!-- Counter Row -->
-        <div class="row g-3 mb-2">
-            @{
-                var counters = new[] {
-                    new { Value = "123", Label = "Teachers" },
-                    new { Value = "6,308", Label = "Full-time Students" },
-                    new { Value = "28", Label = "Offered Programs" },
-                    new { Value = "2,329", Label = "Registered Students" }
-                };
-            }
-            @foreach (var c in counters)
-            {
-                <div class="col-6 col-md-3">
-                    <div class="counter-card">
-                        <div class="counter-value">@c.Value</div>
-                        <div class="counter-label">@c.Label</div>
-                    </div>
-                </div>
-            }
+    </div>
+</section>
+
+<!-- ========== STATS BAR ========== -->
+<section class="stats-bar" aria-label="University statistics">
+    <div class="stats-inner">
+        <div class="stat-item">
+            <span class="stat-number mono">2,400+</span>
+            <span class="stat-label section-label">STUDENTS</span>
+        </div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat-item">
+            <span class="stat-number mono">180+</span>
+            <span class="stat-label section-label">FACULTY</span>
+        </div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat-item">
+            <span class="stat-number mono">12</span>
+            <span class="stat-label section-label">DEPTS</span>
+        </div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat-item">
+            <span class="stat-number mono">99.8%</span>
+            <span class="stat-label section-label">UPTIME</span>
         </div>
     </div>
 </section>
 
-<!-- ========== DEPARTMENTS SECTION ========== -->
-<section class="content-section">
-    <div class="container-xl">
-        <div class="text-center mb-5">
-            <h2 class="section-title">Our <span class="text-gradient">Departments</span></h2>
-            <p class="section-subtitle">HITEC University offers a wide range of programs across engineering, sciences, and management.</p>
+<!-- ========== FEATURES SECTION ========== -->
+<section class="features-section" id="features">
+    <div class="features-inner">
+        <div class="features-header">
+            <p class="section-label">CAPABILITIES</p>
+            <h2 class="features-title">What HiSUP Manages</h2>
         </div>
-        <div class="row g-3">
-            @{
-                var departments = new[] {
-                    new { Icon = "bi-lightning-fill", Color = "#6366f1", Name = "Mechanical Engineering" },
-                    new { Icon = "bi-plug-fill", Color = "#22c55e", Name = "Electrical Engineering" },
-                    new { Icon = "bi-cpu-fill", Color = "#a855f7", Name = "Computer Science" },
-                    new { Icon = "bi-building-fill", Color = "#14b8a6", Name = "Civil Engineering" },
-                    new { Icon = "bi-heart-pulse-fill", Color = "#ef4444", Name = "Biomedical Engineering" },
-                    new { Icon = "bi-gear-wide-connected", Color = "#3b82f6", Name = "Computer Engineering" },
-                    new { Icon = "bi-briefcase-fill", Color = "#f59e0b", Name = "Business Administration" },
-                    new { Icon = "bi-calculator-fill", Color = "#10b981", Name = "Mathematics" }
-                };
-            }
-            @foreach (var dept in departments)
-            {
-                <div class="col-6 col-md-3">
-                    <div class="dept-card">
-                        <div class="dept-icon" style="background: @(dept.Color)22; color: @dept.Color;">
-                            <i class="bi @dept.Icon"></i>
-                        </div>
-                        <span class="dept-name">@dept.Name</span>
-                    </div>
+        <div class="features-grid">
+
+            <div class="feature-card card-dark">
+                <div class="feature-icon" aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                    </svg>
                 </div>
-            }
+                <h3 class="feature-title">Academic Management</h3>
+                <p class="feature-desc">Course registration, grade entry, CGPA tracking, and full academic transcript generation via SQL views.</p>
+            </div>
+
+            <div class="feature-card card-dark">
+                <div class="feature-icon" aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                        <line x1="2" y1="10" x2="22" y2="10"></line>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Fee &amp; Finance</h3>
+                <p class="feature-desc">Secure fee submission, payment approvals, defaulter identification, and revenue analytics via stored procedures.</p>
+            </div>
+
+            <div class="feature-card card-dark">
+                <div class="feature-icon" aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Library Search</h3>
+                <p class="feature-desc">SQL Server full-text search across title and author columns simultaneously. Real-time catalog with availability tracking.</p>
+            </div>
+
         </div>
     </div>
 </section>
 
 <!-- ========== PORTALS SECTION ========== -->
-<section id="portals" class="content-section">
-    <div class="container-xl">
-        <div class="text-center mb-5">
-            <h2 class="section-title">Choose Your <span class="text-gradient">Gateway</span></h2>
-            <p class="section-subtitle">Select your role to access your personalized dashboard and tools.</p>
+<section class="portals-section" id="portals">
+    <div class="portals-inner">
+        <div class="portals-header">
+            <p class="section-label">ACCESS CONTROL</p>
+            <h2 class="portals-title">Choose Your Gateway</h2>
         </div>
-        <div class="row g-4">
-            <div class="col-md-6 col-lg-3">
-                <div class="portal-card">
-                    <div class="portal-icon" style="background: #6366f122; color: #6366f1;"><i class="bi bi-shield-lock-fill"></i></div>
-                    <h5 class="portal-title">Admin Portal</h5>
-                    <p class="portal-desc">System oversight, user management, course approvals & analytics.</p>
-                    <a asp-controller="Admin" asp-action="Index" class="portal-link">Enter Portal <i class="bi bi-arrow-right"></i></a>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="portal-card">
-                    <div class="portal-icon" style="background: #3b82f622; color: #3b82f6;"><i class="bi bi-person-circle"></i></div>
-                    <h5 class="portal-title">Student Portal</h5>
-                    <p class="portal-desc">Courses, grades, fee management & library access.</p>
-                    <a asp-controller="Student" asp-action="Index" class="portal-link">Enter Portal <i class="bi bi-arrow-right"></i></a>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="portal-card">
-                    <div class="portal-icon" style="background: #22c55e22; color: #22c55e;"><i class="bi bi-person-workspace"></i></div>
-                    <h5 class="portal-title">Faculty Portal</h5>
-                    <p class="portal-desc">Timetable management, grading & attendance tracking.</p>
-                    <a asp-controller="Faculty" asp-action="Index" class="portal-link">Enter Portal <i class="bi bi-arrow-right"></i></a>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="portal-card">
-                    <div class="portal-icon" style="background: #f59e0b22; color: #f59e0b;"><i class="bi bi-book-fill"></i></div>
-                    <h5 class="portal-title">Librarian Portal</h5>
-                    <p class="portal-desc">Inventory management, circulation & fine tracking.</p>
-                    <a asp-controller="Library" asp-action="Index" class="portal-link">Enter Portal <i class="bi bi-arrow-right"></i></a>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+        <div class="portals-grid">
 
-<!-- ========== CTA SECTION ========== -->
-<section class="content-section">
-    <div class="container-xl">
-        <div class="cta-card text-center">
-            <h2 class="fw-bold text-light mb-3" style="font-family:'Outfit',sans-serif; font-size:2rem;">Ready to Get Started?</h2>
-            <p class="text-secondary mb-4">Join thousands of students, faculty, and staff who use HiSUP to manage their university experience.</p>
-            <a asp-controller="Auth" asp-action="Login" class="btn btn-gradient-hero px-5 py-2 fw-semibold">
-                Sign In <i class="bi bi-arrow-right ms-1"></i>
+            <a asp-controller="Admin" asp-action="Index" class="portal-entry" id="portalAdmin">
+                <span class="portal-role section-label">ADMIN</span>
+                <span class="portal-name">Administration Panel</span>
+                <span class="portal-detail">System oversight, user management, course approvals &amp; audit logs</span>
+                <span class="portal-arrow">&rarr;</span>
             </a>
+
+            <a asp-controller="Student" asp-action="Index" class="portal-entry" id="portalStudent">
+                <span class="portal-role section-label">STUDENT</span>
+                <span class="portal-name">Student Portal</span>
+                <span class="portal-detail">Courses, grades, fee management &amp; library access</span>
+                <span class="portal-arrow">&rarr;</span>
+            </a>
+
+            <a asp-controller="Faculty" asp-action="Index" class="portal-entry" id="portalFaculty">
+                <span class="portal-role section-label">FACULTY</span>
+                <span class="portal-name">Faculty Dashboard</span>
+                <span class="portal-detail">Timetable, grading &amp; attendance tracking</span>
+                <span class="portal-arrow">&rarr;</span>
+            </a>
+
+            <a asp-controller="Finance" asp-action="Index" class="portal-entry" id="portalFinance">
+                <span class="portal-role section-label">FINANCE</span>
+                <span class="portal-name">Finance Office</span>
+                <span class="portal-detail">Collections, pending approvals &amp; defaulters report</span>
+                <span class="portal-arrow">&rarr;</span>
+            </a>
+
         </div>
     </div>
 </section>
 
-<!-- ========== CONTACT SECTION ========== -->
-<section class="content-section" id="contact">
-    <div class="container-xl">
-        <div class="text-center mb-5">
-            <h2 class="section-title">Get In <span class="text-gradient">Touch</span></h2>
-            <p class="section-subtitle">Have questions? Reach out to us.</p>
+<!-- ========== ABOUT SECTION ========== -->
+<section class="about-section" id="about">
+    <div class="about-inner">
+        <div class="about-header">
+            <p class="section-label">ABOUT THE INSTITUTION</p>
+            <h2 class="about-title">HITEC University, Taxila</h2>
+            <p class="about-desc">
+                Located in the historic city of Taxila — one of the world's oldest centers of learning —
+                HITEC University stands at the intersection of a rich intellectual heritage and a dynamic
+                industrial ecosystem. Our close association with Heavy Industries Taxila (HIT) provides
+                a distinctive advantage, integrating academic knowledge with industrial expertise.
+            </p>
         </div>
-        <div class="row g-4 justify-content-center">
-            <div class="col-md-4">
-                <div class="contact-card text-center">
-                    <div class="contact-icon"><i class="bi bi-geo-alt-fill"></i></div>
-                    <h6 class="fw-bold text-light mt-3 mb-1">Address</h6>
-                    <p class="text-secondary small mb-0">HITEC University, Taxila Cantt,<br />Rawalpindi, Punjab 47080, Pakistan</p>
-                </div>
+        <div class="about-grid">
+            <div class="about-info-card card-dark">
+                <span class="stat-card-title">Vision</span>
+                <p style="font-size:14px; color: var(--clr-muted); line-height: 1.65;">
+                    To be a premier institution achieving academic excellence through innovative solutions,
+                    in collaboration with industry, for sustainable development and socio-economic growth.
+                </p>
             </div>
-            <div class="col-md-4">
-                <div class="contact-card text-center">
-                    <div class="contact-icon"><i class="bi bi-telephone-fill"></i></div>
-                    <h6 class="fw-bold text-light mt-3 mb-1">Phone</h6>
-                    <p class="text-secondary small mb-0">+92-51-4908500-18</p>
-                </div>
+            <div class="about-info-card card-dark">
+                <span class="stat-card-title">Mission</span>
+                <p style="font-size:14px; color: var(--clr-muted); line-height: 1.65;">
+                    To impart quality education by equipping students with knowledge, research, creativity
+                    and entrepreneurial skills to compete in the local and global market.
+                </p>
             </div>
-            <div class="col-md-4">
-                <div class="contact-card text-center">
-                    <div class="contact-icon"><i class="bi bi-envelope-fill"></i></div>
-                    <h6 class="fw-bold text-light mt-3 mb-1">Email</h6>
-                    <p class="text-secondary small mb-0">info@hitecuni.edu.pk</p>
-                </div>
+            <div class="about-info-card card-dark">
+                <span class="stat-card-title">Contact</span>
+                <p class="mono" style="font-size:12px; color: var(--clr-muted); line-height: 1.8;">
+                    HITEC University, Taxila Cantt<br />
+                    Rawalpindi, Punjab 47080<br />
+                    +92-51-4908500-18<br />
+                    info@hitecuni.edu.pk
+                </p>
             </div>
         </div>
     </div>
@@ -250,177 +210,326 @@
 
 <style>
     /* ---- Hero ---- */
-    .hero-section {
+    .landing-hero {
         min-height: 100vh;
         display: flex;
         align-items: center;
-        justify-content: center;
-        padding: 6rem 1rem 4rem;
-        position: relative;
-        overflow: hidden;
-    }
-    .hero-section::before {
-        content: '';
-        position: absolute;
-        width: 600px; height: 600px;
-        background: radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%);
-        top: 10%; left: 50%;
-        transform: translateX(-50%);
-        pointer-events: none;
-    }
-    .hero-content { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; }
-    .hero-badge {
-        display: inline-block;
-        background: rgba(99,102,241,0.15);
-        border: 1px solid rgba(99,102,241,0.3);
-        border-radius: 50px;
-        padding: 0.4rem 1.2rem;
-        font-size: 0.82rem;
-        color: #a5b4fc;
-    }
-    .hero-title {
-        font-family: 'Outfit', sans-serif;
-        font-size: clamp(2.5rem, 6vw, 4rem);
-        font-weight: 800;
-        color: #f0f0f0;
-        line-height: 1.1;
-        margin-bottom: 1.2rem;
-    }
-    .text-gradient {
-        background: linear-gradient(135deg, #6366f1, #8b5cf6, #3b82f6);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-    }
-    .hero-subtitle {
-        font-size: 1.05rem;
-        color: #94a3b8;
-        line-height: 1.7;
-        margin-bottom: 2.5rem;
-    }
-    .btn-gradient-hero {
-        background: linear-gradient(135deg, #6366f1, #8b5cf6);
-        color: #fff;
-        border: none;
-        border-radius: 8px;
-        transition: all 0.3s ease;
-        font-size: 0.95rem;
-    }
-    .btn-gradient-hero:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(99,102,241,0.4); color: #fff; }
-    .btn-outline-hero {
-        background: transparent;
-        color: #e2e8f0;
-        border: 1px solid rgba(255,255,255,0.2);
-        border-radius: 8px;
-        font-size: 0.95rem;
-        transition: all 0.3s ease;
-    }
-    .btn-outline-hero:hover { background: rgba(255,255,255,0.08); color: #fff; }
-    .btn-ghost-hero {
-        background: transparent;
-        color: #94a3b8;
-        border: 1px solid rgba(255,255,255,0.1);
-        border-radius: 8px;
-        font-size: 0.95rem;
-        transition: all 0.3s ease;
-    }
-    .btn-ghost-hero:hover { color: #e2e8f0; border-color: rgba(255,255,255,0.2); }
-    .hero-tag {
-        background: rgba(255,255,255,0.05);
-        border: 1px solid rgba(255,255,255,0.1);
-        border-radius: 50px;
-        padding: 0.3rem 0.9rem;
-        font-size: 0.8rem;
-        color: #94a3b8;
+        border-bottom: 1px solid var(--clr-border);
+        padding: 80px 0 40px;
     }
 
-    /* ---- Sections ---- */
-    .content-section { padding: 5rem 1rem; }
-    .section-title { font-family: 'Outfit', sans-serif; font-size: 2rem; font-weight: 700; color: #f0f0f0; margin-bottom: 1rem; }
-    .section-subtitle { color: #64748b; max-width: 580px; margin: 0 auto; font-size: 0.95rem; line-height: 1.7; }
-
-    /* ---- Stat Cards ---- */
-    .stat-card {
-        background: rgba(255,255,255,0.03);
-        border: 1px solid rgba(255,255,255,0.07);
-        border-radius: 12px;
-        padding: 1.2rem 0.8rem;
-        transition: transform 0.2s;
-    }
-    .stat-card:hover { transform: translateY(-3px); }
-    .stat-icon { font-size: 1.4rem; color: #6366f1; }
-    .stat-value { font-size: 1.3rem; font-weight: 700; color: #f0f0f0; font-family: 'Outfit', sans-serif; }
-    .stat-label { font-size: 0.72rem; color: #64748b; }
-
-    /* ---- Vision/Mission ---- */
-    .vision-card, .mission-card {
-        background: rgba(99,102,241,0.06);
-        border: 1px solid rgba(99,102,241,0.15);
-        border-radius: 14px;
-        padding: 1.8rem;
-        height: 100%;
-    }
-    .mission-card { background: rgba(20,184,166,0.06); border-color: rgba(20,184,166,0.15); }
-    .vision-icon { font-size: 1.5rem; color: #6366f1; }
-    .vision-icon.teal { color: #14b8a6; }
-
-    /* ---- Counter ---- */
-    .counter-card {
-        background: rgba(255,255,255,0.03);
-        border: 1px solid rgba(255,255,255,0.07);
-        border-radius: 12px;
-        padding: 1.5rem 1rem;
-    }
-    .counter-value { font-family: 'Outfit', sans-serif; font-size: 2rem; font-weight: 700; color: #f0f0f0; }
-    .counter-label { font-size: 0.78rem; color: #64748b; }
-
-    /* ---- Department ---- */
-    .dept-card {
-        background: rgba(255,255,255,0.03);
-        border: 1px solid rgba(255,255,255,0.07);
-        border-radius: 12px;
-        padding: 1.2rem;
-        display: flex;
+    .hero-inner {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 40px;
+        display: grid;
+        grid-template-columns: 3fr 2fr;
+        gap: 80px;
         align-items: center;
-        gap: 0.8rem;
-        transition: border-color 0.2s, transform 0.2s;
-        cursor: default;
-    }
-    .dept-card:hover { border-color: rgba(99,102,241,0.3); transform: translateY(-2px); }
-    .dept-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
-    .dept-name { font-size: 0.85rem; color: #cbd5e1; font-weight: 500; }
-
-    /* ---- Portal Cards ---- */
-    .portal-card {
-        background: rgba(255,255,255,0.03);
-        border: 1px solid rgba(255,255,255,0.07);
-        border-radius: 16px;
-        padding: 1.8rem;
-        height: 100%;
-        transition: border-color 0.2s, transform 0.2s;
-    }
-    .portal-card:hover { transform: translateY(-4px); border-color: rgba(99,102,241,0.3); }
-    .portal-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 1rem; }
-    .portal-title { font-weight: 700; color: #f0f0f0; font-size: 1rem; margin-bottom: 0.5rem; }
-    .portal-desc { font-size: 0.8rem; color: #64748b; line-height: 1.5; margin-bottom: 1rem; }
-    .portal-link { font-size: 0.82rem; color: #6366f1; text-decoration: none; font-weight: 600; transition: gap 0.2s; }
-    .portal-link:hover { color: #a5b4fc; }
-
-    /* ---- CTA ---- */
-    .cta-card {
-        background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(139,92,246,0.05));
-        border: 1px solid rgba(99,102,241,0.2);
-        border-radius: 20px;
-        padding: 4rem 2rem;
+        width: 100%;
     }
 
-    /* ---- Contact ---- */
-    .contact-card {
-        background: rgba(255,255,255,0.03);
-        border: 1px solid rgba(255,255,255,0.07);
-        border-radius: 14px;
-        padding: 2rem;
-        height: 100%;
+    .hero-headline {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin: 16px 0 20px;
     }
-    .contact-icon { font-size: 1.5rem; color: #6366f1; }
+
+    .hero-line-1 {
+        font-family: 'Inter', sans-serif;
+        font-size: clamp(44px, 7vw, 76px);
+        font-weight: 900;
+        letter-spacing: -0.04em;
+        color: var(--clr-white);
+        line-height: 1;
+        display: block;
+    }
+
+    .hero-line-2 {
+        font-family: 'Inter', sans-serif;
+        font-size: clamp(20px, 3vw, 34px);
+        font-weight: 400;
+        letter-spacing: -0.01em;
+        color: var(--clr-yellow);
+        line-height: 1.2;
+        display: block;
+    }
+
+    .hero-desc {
+        font-size: 15px;
+        color: var(--clr-muted);
+        line-height: 1.65;
+        max-width: 480px;
+        margin-bottom: 32px;
+    }
+
+    .hero-cta {
+        font-size: 15px;
+        font-weight: 700;
+        padding: 14px 28px;
+        letter-spacing: 0.01em;
+    }
+
+    /* Hero Right — system list */
+    .hero-right {
+        padding-left: 40px;
+        border-left: 1px solid var(--clr-border);
+    }
+
+    .hero-system-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .hero-system-item {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        padding: 20px 0 20px 20px;
+        border-left: 3px solid var(--clr-yellow);
+        margin-bottom: 16px;
+    }
+
+    .hero-system-label {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--clr-text);
+        letter-spacing: 0.12em;
+    }
+
+    .hero-system-sub {
+        font-size: 12px;
+        color: var(--clr-muted);
+        font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* ---- Stats Bar ---- */
+    .stats-bar {
+        background: var(--clr-black);
+        border-bottom: 1px solid var(--clr-border);
+        padding: 0;
+    }
+
+    .stats-inner {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 40px;
+        display: flex;
+        align-items: stretch;
+    }
+
+    .stat-item {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 32px 24px;
+        gap: 6px;
+        text-align: center;
+    }
+
+    .stat-number {
+        font-family: 'Inter', sans-serif;
+        font-size: clamp(24px, 3.5vw, 40px);
+        font-weight: 800;
+        color: var(--clr-yellow);
+        letter-spacing: -0.03em;
+        line-height: 1;
+    }
+
+    .stat-label {
+        font-size: 10px;
+        letter-spacing: 0.15em;
+        margin-bottom: 0;
+    }
+
+    .stat-divider {
+        width: 1px;
+        background: var(--clr-border);
+        align-self: stretch;
+        flex-shrink: 0;
+    }
+
+    /* ---- Features ---- */
+    .features-section {
+        padding: 80px 0;
+        border-bottom: 1px solid var(--clr-border);
+    }
+
+    .features-inner {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 40px;
+    }
+
+    .features-header { margin-bottom: 40px; }
+
+    .features-title {
+        font-size: clamp(22px, 3vw, 32px);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        color: var(--clr-white);
+        margin-top: 6px;
+    }
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2px;
+    }
+
+    .feature-card {
+        padding: 28px 24px;
+    }
+
+    .feature-icon {
+        color: var(--clr-yellow);
+        margin-bottom: 16px;
+    }
+
+    .feature-title {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--clr-white);
+        margin-bottom: 8px;
+        letter-spacing: -0.01em;
+    }
+
+    .feature-desc {
+        font-size: 13px;
+        color: var(--clr-muted);
+        line-height: 1.65;
+    }
+
+    /* ---- Portals ---- */
+    .portals-section {
+        padding: 80px 0;
+        border-bottom: 1px solid var(--clr-border);
+    }
+
+    .portals-inner {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 40px;
+    }
+
+    .portals-header { margin-bottom: 40px; }
+
+    .portals-title {
+        font-size: clamp(22px, 3vw, 32px);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        color: var(--clr-white);
+        margin-top: 6px;
+    }
+
+    .portals-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 2px;
+    }
+
+    .portal-entry {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        background: var(--clr-surface);
+        border: 1px solid var(--clr-border);
+        border-radius: 2px;
+        padding: 24px 20px;
+        text-decoration: none;
+        transition: border-color 0.15s ease, background 0.15s ease;
+    }
+
+    .portal-entry:hover {
+        border-color: var(--clr-yellow);
+        background: #141414;
+        color: inherit;
+    }
+
+    .portal-entry:hover .portal-arrow {
+        color: var(--clr-yellow);
+    }
+
+    .portal-role { font-size: 10px; }
+
+    .portal-name {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--clr-white);
+        letter-spacing: -0.01em;
+    }
+
+    .portal-detail {
+        font-size: 12px;
+        color: var(--clr-muted);
+        line-height: 1.55;
+        flex: 1;
+    }
+
+    .portal-arrow {
+        font-size: 18px;
+        color: var(--clr-border);
+        margin-top: 8px;
+        transition: color 0.15s ease;
+    }
+
+    /* ---- About ---- */
+    .about-section {
+        padding: 80px 0;
+    }
+
+    .about-inner {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 40px;
+    }
+
+    .about-header {
+        margin-bottom: 40px;
+        max-width: 640px;
+    }
+
+    .about-title {
+        font-size: clamp(22px, 3vw, 32px);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        margin-top: 6px;
+        margin-bottom: 16px;
+    }
+
+    .about-desc {
+        font-size: 14px;
+        color: var(--clr-muted);
+        line-height: 1.7;
+    }
+
+    .about-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2px;
+    }
+
+    .about-info-card { padding: 24px; }
+
+    /* ---- Responsive ---- */
+    @@media (max-width: 1100px) {
+        .hero-inner { grid-template-columns: 1fr; gap: 48px; }
+        .hero-right { padding-left: 0; border-left: none; border-top: 1px solid var(--clr-border); padding-top: 40px; }
+        .portals-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @@media (max-width: 767px) {
+        .landing-hero { padding: 60px 0 40px; }
+        .hero-inner { padding: 0 20px; gap: 32px; }
+        .features-inner, .portals-inner, .about-inner, .stats-inner { padding: 0 20px; }
+        .features-section, .portals-section, .about-section { padding: 56px 0; }
+        .features-grid { grid-template-columns: 1fr; }
+        .portals-grid { grid-template-columns: 1fr; }
+        .about-grid { grid-template-columns: 1fr; }
+        .stat-item { padding: 24px 12px; }
+    }
 </style>

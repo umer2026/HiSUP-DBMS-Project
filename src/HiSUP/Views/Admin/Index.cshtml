@@ -1,86 +1,80 @@
 @{
-    ViewData["Title"] = "Admin Panel";
+    ViewData["Title"] = "Admin Dashboard — HiSUP";
 }
 
-<!-- Header -->
-<div class="row mb-4">
-    <div class="col-12">
-        <div class="glass-card p-4 d-flex align-items-center justify-content-between">
-            <div>
-                <h1 class="fw-bold mb-1" style="font-family:'Outfit',sans-serif;">
-                    <i class="bi bi-shield-lock-fill me-2 text-primary"></i>Administration Panel
-                </h1>
-                <p class="text-muted mb-0">Manage university students, courses, and review system audit logs.</p>
-            </div>
-            <span class="badge badge-premium px-3 py-2 fs-6">
-                <i class="bi bi-person-gear me-1"></i>Administrator
-            </span>
-        </div>
-    </div>
-</div>
+<div class="portal-page">
 
-<!-- Stats Row -->
-<div class="row g-4 mb-4">
-    <div class="col-md-3">
-        <div class="glass-card p-4 text-center">
-            <div class="text-primary fs-1 mb-2"><i class="bi bi-people-fill"></i></div>
-            <h5 class="text-muted fw-semibold mb-1">Total Students</h5>
-            <h2 class="display-5 fw-bold text-light mb-0">@ViewBag.TotalStudents</h2>
-        </div>
+    <div class="page-header">
+        <span class="section-label">ADMIN / DASHBOARD</span>
+        <h1 class="page-title">Administration Panel</h1>
+        <p style="font-size:14px; color:var(--clr-muted); margin-top:4px;">
+            Manage university students, courses, and review system audit logs.
+        </p>
     </div>
-    <div class="col-md-3">
-        <div class="glass-card p-4 text-center">
-            <div class="text-success fs-1 mb-2"><i class="bi bi-person-workspace"></i></div>
-            <h5 class="text-muted fw-semibold mb-1">Faculty Members</h5>
-            <h2 class="display-5 fw-bold text-light mb-0">@ViewBag.TotalFaculty</h2>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="glass-card p-4 text-center">
-            <div class="text-warning fs-1 mb-2"><i class="bi bi-journal-bookmark-fill"></i></div>
-            <h5 class="text-muted fw-semibold mb-1">Total Courses</h5>
-            <h2 class="display-5 fw-bold text-light mb-0">@ViewBag.TotalCourses</h2>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="glass-card p-4 text-center">
-            <div class="text-danger fs-1 mb-2"><i class="bi bi-journal-text"></i></div>
-            <h5 class="text-muted fw-semibold mb-1">Audit Log Entries</h5>
-            <h2 class="display-5 fw-bold text-light mb-0">@ViewBag.TotalAuditLogs</h2>
-        </div>
-    </div>
-</div>
 
-<!-- Quick Actions -->
-<div class="row g-4">
-    <div class="col-md-4">
-        <a asp-controller="Admin" asp-action="Students" class="text-decoration-none">
-            <div class="glass-card p-4 text-center h-100">
-                <i class="bi bi-person-search fs-1 text-info mb-3 d-block"></i>
-                <h5 class="fw-bold">Search Students</h5>
-                <p class="text-muted small">Dynamic stored-procedure powered student search with CGPA, program and status filters.</p>
-                <span class="btn btn-gradient btn-sm mt-2 px-4">Open</span>
+    <div class="page-body">
+
+        <!-- Stats Row -->
+        <div class="row g-2 mb-4">
+            <div class="col-md-3">
+                <div class="stat-card-dark">
+                    <span class="stat-card-title">Total Students</span>
+                    <span class="stat-card-value">@ViewBag.TotalStudents</span>
+                </div>
             </div>
-        </a>
-    </div>
-    <div class="col-md-4">
-        <a asp-controller="Admin" asp-action="AuditLogs" class="text-decoration-none">
-            <div class="glass-card p-4 text-center h-100">
-                <i class="bi bi-journal-text fs-1 text-danger mb-3 d-block"></i>
-                <h5 class="fw-bold">Audit Logs</h5>
-                <p class="text-muted small">View all database-level INSERT/UPDATE/DELETE transactions captured by SQL triggers.</p>
-                <span class="btn btn-gradient btn-sm mt-2 px-4">View Logs</span>
+            <div class="col-md-3">
+                <div class="stat-card-dark">
+                    <span class="stat-card-title">Faculty Members</span>
+                    <span class="stat-card-value">@ViewBag.TotalFaculty</span>
+                </div>
             </div>
-        </a>
-    </div>
-    <div class="col-md-4">
-        <a asp-controller="Library" asp-action="Index" class="text-decoration-none">
-            <div class="glass-card p-4 text-center h-100">
-                <i class="bi bi-book-fill fs-1 text-warning mb-3 d-block"></i>
-                <h5 class="fw-bold">Library System</h5>
-                <p class="text-muted small">View overdue books, manage catalog and issue/return tracking via SQL views.</p>
-                <span class="btn btn-gradient btn-sm mt-2 px-4">Open</span>
+            <div class="col-md-3">
+                <div class="stat-card-dark">
+                    <span class="stat-card-title">Total Courses</span>
+                    <span class="stat-card-value">@ViewBag.TotalCourses</span>
+                </div>
             </div>
-        </a>
+            <div class="col-md-3">
+                <div class="stat-card-dark">
+                    <span class="stat-card-title">Audit Log Entries</span>
+                    <span class="stat-card-value">@ViewBag.TotalAuditLogs</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="row g-2">
+            <div class="col-md-4">
+                <a asp-controller="Admin" asp-action="Students" class="action-card" id="adminStudentsCard">
+                    <span class="action-card-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    </span>
+                    <span class="action-card-title">Search Students</span>
+                    <span class="action-card-desc">Dynamic stored-procedure powered student search with CGPA, program and status filters.</span>
+                    <span class="btn-ghost" style="margin-top:16px; font-size:13px; padding:8px 16px; display:inline-block;">Open &rarr;</span>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a asp-controller="Admin" asp-action="AuditLogs" class="action-card" id="adminAuditCard">
+                    <span class="action-card-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    </span>
+                    <span class="action-card-title">Audit Logs</span>
+                    <span class="action-card-desc">View all database-level INSERT/UPDATE/DELETE transactions captured by SQL triggers.</span>
+                    <span class="btn-ghost" style="margin-top:16px; font-size:13px; padding:8px 16px; display:inline-block;">View Logs &rarr;</span>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a asp-controller="Library" asp-action="Index" class="action-card" id="adminLibraryCard">
+                    <span class="action-card-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                    </span>
+                    <span class="action-card-title">Library System</span>
+                    <span class="action-card-desc">View overdue books, manage catalog and issue/return tracking via SQL views.</span>
+                    <span class="btn-ghost" style="margin-top:16px; font-size:13px; padding:8px 16px; display:inline-block;">Open &rarr;</span>
+                </a>
+            </div>
+        </div>
+
     </div>
 </div>

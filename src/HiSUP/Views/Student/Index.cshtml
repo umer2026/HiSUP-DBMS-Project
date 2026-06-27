@@ -1,121 +1,113 @@
 @model HiSUP.Controllers.vw_StudentDashboardDto
 @{
-    ViewData["Title"] = "Student Dashboard";
+    ViewData["Title"] = "Student Dashboard — HiSUP";
 }
 
 @if (Model == null)
 {
-    <div class="text-center py-5 text-muted">
-        <i class="bi bi-exclamation-circle fs-1 d-block mb-3"></i>
-        <h5>Unable to load dashboard. Please <a asp-controller="Auth" asp-action="Login">login again</a>.</h5>
+    <div class="portal-page">
+        <div class="page-body" style="text-align:center; padding-top:80px; color:var(--clr-muted);">
+            <p style="font-size:14px;">Unable to load dashboard. Please
+                <a asp-controller="Auth" asp-action="Login" style="color:var(--clr-yellow);">login again</a>.
+            </p>
+        </div>
     </div>
     return;
 }
 
-<!-- Welcome Banner -->
-<div class="row mb-4">
-    <div class="col-12">
-        <div class="glass-card p-4 d-flex align-items-center justify-content-between">
-            <div>
-                <h1 class="fw-bold mb-1" style="font-family:'Outfit',sans-serif;">
-                    Welcome back, @Model.FirstName @Model.LastName! 👋
-                </h1>
-                <p class="text-muted mb-0">
-                    <i class="bi bi-mortarboard-fill me-1"></i>@Model.ProgramName
-                    &nbsp;&bull;&nbsp;
-                    <i class="bi bi-calendar3 me-1"></i>Semester @Model.CurrentSemester
-                    &nbsp;&bull;&nbsp;
-                    <span class="text-light">@Model.Email</span>
-                </p>
-            </div>
-            <span class="badge badge-premium px-3 py-2 fs-6">
-                <i class="bi bi-circle-fill me-1 @(Model.Status == "Active" ? "text-success" : "text-warning")" style="font-size:0.6rem;"></i>
-                @Model.Status
-            </span>
-        </div>
-    </div>
-</div>
+<div class="portal-page">
 
-<!-- Key Stats -->
-<div class="row g-4 mb-4">
-    <div class="col-md-4">
-        <div class="glass-card p-4 text-center">
-            <div class="text-primary fs-1 mb-2"><i class="bi bi-mortarboard-fill"></i></div>
-            <h5 class="text-muted fw-semibold mb-1">Cumulative CGPA</h5>
-            <h2 class="display-4 fw-bold text-light mb-0">@Model.CGPA.ToString("0.00")</h2>
-            <small class="text-secondary">Out of 4.00</small>
-            <div class="progress mt-3" style="height:6px; background:rgba(255,255,255,0.1);">
-                <div class="progress-bar bg-primary" style="width:@((Model.CGPA / 4.0m * 100).ToString("0"))%"></div>
-            </div>
-        </div>
+    <div class="page-header">
+        <span class="section-label">STUDENT / DASHBOARD</span>
+        <h1 class="page-title">@Model.FirstName @Model.LastName</h1>
+        <p style="font-size:13px; color:var(--clr-muted); margin-top:6px; font-family:var(--font-mono);">
+            @Model.ProgramName &nbsp;&middot;&nbsp; Semester @Model.CurrentSemester &nbsp;&middot;&nbsp;
+            <span style="color:var(--clr-text);">@Model.Email</span>
+            &nbsp;&middot;&nbsp;
+            <span class="status-badge @(Model.Status == "Active" ? "status-active" : "status-warning")">@Model.Status</span>
+        </p>
     </div>
-    <div class="col-md-4">
-        <div class="glass-card p-4 text-center">
-            <div class="text-success fs-1 mb-2"><i class="bi bi-calendar-check-fill"></i></div>
-            <h5 class="text-muted fw-semibold mb-1">Attendance Rate</h5>
-            <h2 class="display-4 fw-bold text-light mb-0">@Model.AttendancePercentage.ToString("0.0")<small class="fs-5">%</small></h2>
-            <small class="@(Model.AttendancePercentage < 75 ? "text-danger" : "text-secondary")">
-                @(Model.AttendancePercentage < 75 ? "⚠ Below 75% minimum!" : "Minimum required: 75%")
-            </small>
-            <div class="progress mt-3" style="height:6px; background:rgba(255,255,255,0.1);">
-                <div class="progress-bar @(Model.AttendancePercentage < 75 ? "bg-danger" : "bg-success")"
-                     style="width:@Model.AttendancePercentage.ToString("0")%"></div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="glass-card p-4 text-center">
-            <div class="text-danger fs-1 mb-2"><i class="bi bi-wallet2"></i></div>
-            <h5 class="text-muted fw-semibold mb-1">Outstanding Balance</h5>
-            <h2 class="display-4 fw-bold text-light mb-0">Rs. @Model.OutstandingFee.ToString("N0")</h2>
-            <small class="@(Model.OutstandingFee > 0 ? "text-warning" : "text-secondary")">
-                @(Model.OutstandingFee > 0 ? "Payment required" : "No dues outstanding")
-            </small>
-        </div>
-    </div>
-</div>
 
-<!-- Quick Actions -->
-<div class="row">
-    <div class="col-12">
-        <h4 class="fw-bold mb-3 text-light">Quick Actions</h4>
-        <div class="row g-4">
-            <div class="col-md-3">
-                <a asp-controller="Student" asp-action="CourseRegistration" class="text-decoration-none">
-                    <div class="glass-card p-4 text-center">
-                        <i class="bi bi-journal-plus fs-1 text-primary d-block mb-2"></i>
-                        <h6 class="fw-bold">Course Registration</h6>
-                        <p class="text-muted small mb-0">Enroll in available sections</p>
+    <div class="page-body">
+
+        <!-- Key Stats -->
+        <div class="row g-2 mb-4">
+            <div class="col-md-4">
+                <div class="stat-card-dark">
+                    <span class="stat-card-title">Cumulative CGPA</span>
+                    <span class="stat-card-value">@Model.CGPA.ToString("0.00")</span>
+                    <div style="margin-top:4px; font-family:var(--font-mono); font-size:11px; color:var(--clr-muted);">OUT OF 4.00</div>
+                    <div class="portal-progress" style="margin-top:12px;">
+                        <div class="portal-progress-bar" style="width:@((Model.CGPA / 4.0m * 100).ToString("0"))%;"></div>
                     </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card-dark">
+                    <span class="stat-card-title">Attendance Rate</span>
+                    <span class="stat-card-value">@Model.AttendancePercentage.ToString("0.0")<span style="font-size:16px; font-weight:500;">%</span></span>
+                    <div style="margin-top:4px; font-family:var(--font-mono); font-size:11px; color:@(Model.AttendancePercentage < 75 ? "var(--clr-red)" : "var(--clr-muted)");">
+                        @(Model.AttendancePercentage < 75 ? "⚠ BELOW 75% MINIMUM" : "MIN. REQUIRED: 75%")
+                    </div>
+                    <div class="portal-progress" style="margin-top:12px;">
+                        <div class="portal-progress-bar @(Model.AttendancePercentage < 75 ? "bar-red" : "bar-green")"
+                             style="width:@Model.AttendancePercentage.ToString("0")%;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card-dark" style="border-left-color:@(Model.OutstandingFee > 0 ? "var(--clr-red)" : "var(--clr-yellow)");">
+                    <span class="stat-card-title">Outstanding Balance</span>
+                    <span class="stat-card-value" style="font-size:22px;">Rs. @Model.OutstandingFee.ToString("N0")</span>
+                    <div style="margin-top:4px; font-family:var(--font-mono); font-size:11px; color:@(Model.OutstandingFee > 0 ? "var(--clr-red)" : "var(--clr-muted)");">
+                        @(Model.OutstandingFee > 0 ? "PAYMENT REQUIRED" : "NO DUES OUTSTANDING")
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div style="margin-bottom:16px;">
+            <span class="section-label">QUICK ACTIONS</span>
+        </div>
+        <div class="row g-2">
+            <div class="col-md-3">
+                <a asp-controller="Student" asp-action="CourseRegistration" class="action-card" id="studentCourseCard">
+                    <span class="action-card-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+                    </span>
+                    <span class="action-card-title">Course Registration</span>
+                    <span class="action-card-desc">Enroll in available sections for the current semester.</span>
                 </a>
             </div>
             <div class="col-md-3">
-                <a asp-controller="Student" asp-action="Payments" class="text-decoration-none">
-                    <div class="glass-card p-4 text-center">
-                        <i class="bi bi-credit-card-fill fs-1 text-success d-block mb-2"></i>
-                        <h6 class="fw-bold">Pay Fees</h6>
-                        <p class="text-muted small mb-0">Submit fee payments securely</p>
-                    </div>
+                <a asp-controller="Student" asp-action="Payments" class="action-card" id="studentPayCard">
+                    <span class="action-card-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+                    </span>
+                    <span class="action-card-title">Pay Fees</span>
+                    <span class="action-card-desc">Submit fee payments securely through the portal.</span>
                 </a>
             </div>
             <div class="col-md-3">
-                <a asp-controller="Student" asp-action="Transcript" class="text-decoration-none">
-                    <div class="glass-card p-4 text-center">
-                        <i class="bi bi-file-earmark-text-fill fs-1 text-info d-block mb-2"></i>
-                        <h6 class="fw-bold">Academic Transcript</h6>
-                        <p class="text-muted small mb-0">View full grade history</p>
-                    </div>
+                <a asp-controller="Student" asp-action="Transcript" class="action-card" id="studentTranscriptCard">
+                    <span class="action-card-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                    </span>
+                    <span class="action-card-title">Academic Transcript</span>
+                    <span class="action-card-desc">View your complete grade history and CGPA breakdown.</span>
                 </a>
             </div>
             <div class="col-md-3">
-                <a asp-controller="Library" asp-action="Index" class="text-decoration-none">
-                    <div class="glass-card p-4 text-center">
-                        <i class="bi bi-book-fill fs-1 text-warning d-block mb-2"></i>
-                        <h6 class="fw-bold">Library</h6>
-                        <p class="text-muted small mb-0">Search &amp; borrow books</p>
-                    </div>
+                <a asp-controller="Library" asp-action="Index" class="action-card" id="studentLibraryCard">
+                    <span class="action-card-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                    </span>
+                    <span class="action-card-title">Library</span>
+                    <span class="action-card-desc">Search &amp; browse the library catalog.</span>
                 </a>
             </div>
         </div>
+
     </div>
 </div>

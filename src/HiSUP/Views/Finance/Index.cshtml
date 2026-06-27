@@ -1,70 +1,76 @@
 @{
-    ViewData["Title"] = "Finance Dashboard";
+    ViewData["Title"] = "Finance Dashboard — HiSUP";
 }
 
-<!-- Header -->
-<div class="row mb-4">
-    <div class="col-12">
-        <div class="glass-card p-4 d-flex align-items-center justify-content-between">
-            <div>
-                <h1 class="fw-bold mb-1" style="font-family:'Outfit',sans-serif;">
-                    <i class="bi bi-cash-stack me-2 text-warning"></i>Finance Dashboard
-                </h1>
-                <p class="text-muted mb-0">Monitor fee collections, pending approvals and defaulters.</p>
-            </div>
-            <span class="badge badge-premium px-3 py-2 fs-6">
-                <i class="bi bi-bank me-1"></i>Finance Department
-            </span>
-        </div>
-    </div>
-</div>
+<div class="portal-page">
 
-<!-- Stats Row -->
-<div class="row g-4 mb-4">
-    <div class="col-md-6">
-        <div class="glass-card p-4 text-center">
-            <div class="text-success fs-1 mb-2"><i class="bi bi-cash-coin"></i></div>
-            <h5 class="text-muted fw-semibold mb-1">Total Revenue Collected</h5>
-            <h2 class="display-5 fw-bold text-light mb-0">Rs. @(((decimal)ViewBag.TotalReceived).ToString("N0"))</h2>
-            <small class="text-secondary">Approved payments only</small>
-        </div>
+    <div class="page-header">
+        <span class="section-label">FINANCE / DASHBOARD</span>
+        <h1 class="page-title">Finance Dashboard</h1>
+        <p style="font-size:14px; color:var(--clr-muted); margin-top:4px;">
+            Monitor fee collections, pending approvals, and defaulter reports.
+        </p>
     </div>
-    <div class="col-md-6">
-        <div class="glass-card p-4 text-center">
-            <div class="text-warning fs-1 mb-2"><i class="bi bi-hourglass-split"></i></div>
-            <h5 class="text-muted fw-semibold mb-1">Pending Approvals</h5>
-            <h2 class="display-5 fw-bold text-light mb-0">@ViewBag.PendingPayments</h2>
-            <small class="text-secondary">Payments awaiting review</small>
-        </div>
-    </div>
-</div>
 
-<!-- Quick Actions -->
-<div class="row g-4">
-    <div class="col-md-6">
-        <a asp-controller="Finance" asp-action="Defaulters" class="text-decoration-none">
-            <div class="glass-card p-4 text-center">
-                <i class="bi bi-exclamation-triangle-fill fs-1 text-danger mb-3 d-block"></i>
-                <h5 class="fw-bold">Fee Defaulters Report</h5>
-                <p class="text-muted small">View students with outstanding balances from <code>vw_FeeDefaulters</code> SQL view.</p>
-                <span class="btn btn-gradient btn-sm mt-2 px-4">View Defaulters</span>
-            </div>
-        </a>
-    </div>
-    <div class="col-md-6">
-        <div class="glass-card p-4 text-center">
-            <i class="bi bi-graph-up-arrow fs-1 text-success mb-3 d-block"></i>
-            <h5 class="fw-bold">Revenue Summary</h5>
-            <p class="text-muted small">Real-time aggregation of approved fee payments across all programs and semesters.</p>
-            <div class="mt-3">
-                <div class="d-flex justify-content-between text-muted small mb-1">
-                    <span>Collection Rate</span>
-                    <span>Estimated 72%</span>
+    <div class="page-body">
+
+        <!-- Stats Row -->
+        <div class="row g-2 mb-4">
+            <div class="col-md-6">
+                <div class="stat-card-dark">
+                    <span class="stat-card-title">Total Revenue Collected</span>
+                    <span class="stat-card-value" style="font-size:24px;">Rs. @(((decimal)ViewBag.TotalReceived).ToString("N0"))</span>
+                    <div style="margin-top:4px; font-family:var(--font-mono); font-size:11px; color:var(--clr-muted);">APPROVED PAYMENTS ONLY</div>
                 </div>
-                <div class="progress" style="height:8px; background:rgba(255,255,255,0.1);">
-                    <div class="progress-bar bg-success" style="width:72%;"></div>
+            </div>
+            <div class="col-md-6">
+                <div class="stat-card-dark">
+                    <span class="stat-card-title">Pending Approvals</span>
+                    <span class="stat-card-value">@ViewBag.PendingPayments</span>
+                    <div style="margin-top:4px; font-family:var(--font-mono); font-size:11px; color:var(--clr-muted);">PAYMENTS AWAITING REVIEW</div>
                 </div>
             </div>
         </div>
+
+        <!-- Revenue Bar -->
+        <div class="stat-card-dark mb-4">
+            <span class="stat-card-title">Collection Rate (Estimated)</span>
+            <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px;">
+                <span style="font-size:22px; font-weight:700; color:var(--clr-white);">72%</span>
+                <span class="mono" style="font-size:11px; color:var(--clr-muted);">ACROSS ALL PROGRAMS &amp; SEMESTERS</span>
+            </div>
+            <div class="portal-progress">
+                <div class="portal-progress-bar bar-green" style="width:72%;"></div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="row g-2">
+            <div class="col-md-6">
+                <a asp-controller="Finance" asp-action="Defaulters" class="action-card" id="financeDefaultersCard"
+                   style="border-left-color:var(--clr-red);">
+                    <span class="action-card-icon" style="color:var(--clr-red);">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                    </span>
+                    <span class="action-card-title">Fee Defaulters Report</span>
+                    <span class="action-card-desc">
+                        View students with outstanding balances from <span class="mono">vw_FeeDefaulters</span> SQL view.
+                    </span>
+                    <span class="btn-danger" style="margin-top:16px; font-size:13px; padding:8px 16px; display:inline-block;">View Defaulters &rarr;</span>
+                </a>
+            </div>
+            <div class="col-md-6">
+                <div class="action-card">
+                    <span class="action-card-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                    </span>
+                    <span class="action-card-title">Revenue Summary</span>
+                    <span class="action-card-desc">
+                        Real-time aggregation of approved fee payments across all programs and semesters via stored procedures.
+                    </span>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>

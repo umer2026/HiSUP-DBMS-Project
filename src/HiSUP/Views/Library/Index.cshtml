@@ -1,116 +1,118 @@
 @model List<HiSUP.Models.LibraryItem>
 @{
-    ViewData["Title"] = "Library";
+    ViewData["Title"] = "Library Catalog — HiSUP";
     string search = ViewBag.SearchTerm as string;
 }
 
-<!-- Header -->
-<div class="row mb-4">
-    <div class="col-12">
-        <div class="glass-card p-4 d-flex align-items-center justify-content-between">
-            <div>
-                <h1 class="fw-bold mb-1" style="font-family:'Outfit',sans-serif;">
-                    <i class="bi bi-book-fill me-2 text-danger"></i>Library Catalog
-                </h1>
-                <p class="text-muted mb-0">Full-Text Search using SQL Server <code>CONTAINS</code> / <code>FREETEXT</code> via EF.Functions.</p>
-            </div>
-            <span class="badge badge-premium px-3 py-2 fs-6">
-                <i class="bi bi-book me-1"></i>Library System
-            </span>
-        </div>
-    </div>
-</div>
+<div class="portal-page">
 
-<!-- Search Bar -->
-<div class="glass-card p-4 mb-4">
-    <form method="get" asp-action="Index">
-        <div class="input-group input-group-lg">
-            <span class="input-group-text"><i class="bi bi-search"></i></span>
-            <input type="text" name="search" class="form-control fs-5"
-                   placeholder="Search by title, author, ISBN or keyword..."
-                   value="@search" id="librarySearch" />
-            <button class="btn btn-gradient px-5 fw-bold" type="submit">Search</button>
-            @if (!string.IsNullOrEmpty(search))
-            {
-                <a asp-action="Index" class="btn btn-outline-secondary px-3">
-                    <i class="bi bi-x-circle"></i>
-                </a>
-            }
-        </div>
-        <p class="text-muted small mt-2 mb-0">
-            <i class="bi bi-info-circle me-1"></i>
-            Uses SQL Server Full-Text Search — searches across Title and Author columns simultaneously.
+    <div class="page-header">
+        <span class="section-label">LIBRARY / CATALOG</span>
+        <h1 class="page-title">Library Catalog</h1>
+        <p style="font-size:14px; color:var(--clr-muted); margin-top:4px;">
+            Full-text search using SQL Server <span class="mono">CONTAINS</span> / <span class="mono">FREETEXT</span> across title and author columns.
         </p>
-    </form>
-</div>
-
-<!-- Stats -->
-@if (Model != null)
-{
-    <div class="row g-3 mb-4">
-        <div class="col-md-4">
-            <div class="glass-card p-3 text-center">
-                <div class="text-danger fs-2 mb-1"><i class="bi bi-journals"></i></div>
-                <h5 class="fw-bold mb-0">@Model.Count</h5>
-                <small class="text-muted">
-                    @(string.IsNullOrEmpty(search) ? "Total Catalog Items" : "Search Results")
-                </small>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="glass-card p-3 text-center">
-                <div class="text-success fs-2 mb-1"><i class="bi bi-check-circle"></i></div>
-                <h5 class="fw-bold mb-0">@Model.Count(i => i.CopiesAvailable > 0)</h5>
-                <small class="text-muted">Available Items</small>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="glass-card p-3 text-center">
-                <div class="text-warning fs-2 mb-1"><i class="bi bi-x-circle"></i></div>
-                <h5 class="fw-bold mb-0">@Model.Count(i => i.CopiesAvailable == 0)</h5>
-                <small class="text-muted">Fully Checked Out</small>
-            </div>
-        </div>
     </div>
-}
 
-<!-- Results Grid -->
-@if (!string.IsNullOrEmpty(search) && (Model == null || !Model.Any()))
-{
-    <div class="glass-card p-5 text-center text-secondary">
-        <i class="bi bi-journal-x fs-1 mb-3 d-block opacity-40"></i>
-        <h5>No items found for "<strong>@search</strong>"</h5>
-        <p class="text-muted small">Try different keywords or check the spelling.</p>
-    </div>
-}
-else if (Model != null && Model.Any())
-{
-    <div class="row g-4">
-        @foreach (var item in Model)
+    <div class="page-body">
+
+        <!-- Search Bar -->
+        <div class="filter-panel mb-4">
+            <form method="get" asp-action="Index" id="librarySearchForm">
+                <div style="display:flex; gap:8px; align-items:stretch;">
+                    <input type="text"
+                           name="search"
+                           id="librarySearch"
+                           class="form-input"
+                           placeholder="Search by title, author, ISBN, or keyword..."
+                           value="@search"
+                           style="flex:1; font-size:15px;" />
+                    <button class="btn-primary-yellow" type="submit" id="librarySearchBtn"
+                            style="padding:10px 28px; font-size:14px; white-space:nowrap;">
+                        Search
+                    </button>
+                    @if (!string.IsNullOrEmpty(search))
+                    {
+                        <a asp-action="Index" class="btn-ghost" style="padding:10px 16px; font-size:13px;">Clear</a>
+                    }
+                </div>
+                <p style="font-size:12px; color:var(--clr-muted); margin-top:8px; font-family:var(--font-mono);">
+                    Searches across Title and Author columns simultaneously via Full-Text Search.
+                </p>
+            </form>
+        </div>
+
+        <!-- Stats -->
+        @if (Model != null)
         {
-            <div class="col-md-4">
-                <div class="glass-card p-4 h-100">
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                        <span class="badge badge-premium">@item.Type</span>
-                        <span class="text-muted small"><i class="bi bi-pin-map me-1"></i>Shelf: @item.Location</span>
+            <div class="row g-2 mb-4">
+                <div class="col-md-4">
+                    <div class="stat-card-dark">
+                        <span class="stat-card-title">@(string.IsNullOrEmpty(search) ? "Total Catalog Items" : "Search Results")</span>
+                        <span class="stat-card-value">@Model.Count</span>
                     </div>
-                    <h5 class="fw-bold text-light mb-1">@item.Title</h5>
-                    <p class="text-muted mb-3">By <em>@item.Author</em></p>
-                    <div class="border-top border-secondary border-opacity-25 pt-3 mt-auto d-flex justify-content-between align-items-center">
-                        <small class="text-muted font-monospace">@item.ISBN</small>
-                        <span class="badge @(item.CopiesAvailable > 0 ? "bg-success" : "bg-danger")">
-                            @item.CopiesAvailable / @item.TotalCopies available
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-card-dark">
+                        <span class="stat-card-title">Available Items</span>
+                        <span class="stat-card-value">@Model.Count(i => i.CopiesAvailable > 0)</span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-card-dark" style="border-left-color:var(--clr-red);">
+                        <span class="stat-card-title">Fully Checked Out</span>
+                        <span class="stat-card-value" style="color:@(Model.Count(i => i.CopiesAvailable == 0) > 0 ? "var(--clr-red)" : "var(--clr-white)");">
+                            @Model.Count(i => i.CopiesAvailable == 0)
                         </span>
                     </div>
                 </div>
             </div>
         }
+
+        <!-- Results -->
+        @if (!string.IsNullOrEmpty(search) && (Model == null || !Model.Any()))
+        {
+            <div class="portal-table-wrap" style="padding:48px; text-align:center;">
+                <p style="color:var(--clr-muted); font-size:14px;">
+                    No items found for "<strong style="color:var(--clr-text);">@search</strong>".
+                    Try different keywords or check the spelling.
+                </p>
+            </div>
+        }
+        else if (Model != null && Model.Any())
+        {
+            <div class="row g-2" id="libraryResults">
+                @foreach (var item in Model)
+                {
+                    <div class="col-md-4">
+                        <div class="card-dark" style="height:100%; display:flex; flex-direction:column;">
+                            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+                                <span class="badge-role" style="font-size:9px;">@item.Type</span>
+                                <span class="mono" style="font-size:11px; color:var(--clr-muted);">@item.Location</span>
+                            </div>
+                            <h3 style="font-size:15px; font-weight:700; color:var(--clr-white); margin-bottom:4px; letter-spacing:-0.01em;">
+                                @item.Title
+                            </h3>
+                            <p style="font-size:13px; color:var(--clr-muted); margin-bottom:0; flex:1;">
+                                By <em>@item.Author</em>
+                            </p>
+                            <div style="margin-top:16px; padding-top:12px; border-top:1px solid var(--clr-border); display:flex; justify-content:space-between; align-items:center;">
+                                <span class="mono" style="font-size:11px; color:var(--clr-muted);">@item.ISBN</span>
+                                <span class="status-badge @(item.CopiesAvailable > 0 ? "status-active" : "status-danger")">
+                                    @item.CopiesAvailable / @item.TotalCopies available
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="portal-table-wrap" style="padding:64px; text-align:center;">
+                <p style="color:var(--clr-muted); font-size:14px;">Enter a keyword above to search the library catalog.</p>
+            </div>
+        }
+
     </div>
-}
-else
-{
-    <div class="glass-card p-5 text-center text-muted">
-        <i class="bi bi-search fs-1 d-block mb-3 opacity-30"></i>
-        <h5>Enter a keyword above to search the library catalog.</h5>
-    </div>
-}
+</div>
