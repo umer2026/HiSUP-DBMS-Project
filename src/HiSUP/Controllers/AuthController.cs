@@ -23,6 +23,14 @@ namespace HiSUP.Controllers
         [HttpGet]
         public IActionResult Login()
         {
+            if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                if (User.IsInRole("Admin")) return RedirectToAction("Index", "Admin");
+                if (User.IsInRole("Student")) return RedirectToAction("Index", "Student");
+                if (User.IsInRole("Faculty")) return RedirectToAction("Index", "Faculty");
+                if (User.IsInRole("Finance")) return RedirectToAction("Index", "Finance");
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
         [HttpPost]
@@ -58,6 +66,14 @@ namespace HiSUP.Controllers
         [HttpGet]
         public IActionResult Register()
         {
+            if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                if (User.IsInRole("Admin")) return RedirectToAction("Index", "Admin");
+                if (User.IsInRole("Student")) return RedirectToAction("Index", "Student");
+                if (User.IsInRole("Faculty")) return RedirectToAction("Index", "Faculty");
+                if (User.IsInRole("Finance")) return RedirectToAction("Index", "Finance");
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
         [HttpPost]
@@ -105,10 +121,12 @@ namespace HiSUP.Controllers
             }
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Login");
+            // Redirect to public home so back-navigation after logout hits [Authorize] on portal routes
+            return RedirectToAction("Index", "Home");
         }
     }
 }
