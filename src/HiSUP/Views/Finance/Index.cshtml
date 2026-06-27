@@ -1,0 +1,70 @@
+@{
+    ViewData["Title"] = "Finance Dashboard";
+}
+
+<!-- Header -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="glass-card p-4 d-flex align-items-center justify-content-between">
+            <div>
+                <h1 class="fw-bold mb-1" style="font-family:'Outfit',sans-serif;">
+                    <i class="bi bi-cash-stack me-2 text-warning"></i>Finance Dashboard
+                </h1>
+                <p class="text-muted mb-0">Monitor fee collections, pending approvals and defaulters.</p>
+            </div>
+            <span class="badge badge-premium px-3 py-2 fs-6">
+                <i class="bi bi-bank me-1"></i>Finance Department
+            </span>
+        </div>
+    </div>
+</div>
+
+<!-- Stats Row -->
+<div class="row g-4 mb-4">
+    <div class="col-md-6">
+        <div class="glass-card p-4 text-center">
+            <div class="text-success fs-1 mb-2"><i class="bi bi-cash-coin"></i></div>
+            <h5 class="text-muted fw-semibold mb-1">Total Revenue Collected</h5>
+            <h2 class="display-5 fw-bold text-light mb-0">Rs. @(((decimal)ViewBag.TotalReceived).ToString("N0"))</h2>
+            <small class="text-secondary">Approved payments only</small>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="glass-card p-4 text-center">
+            <div class="text-warning fs-1 mb-2"><i class="bi bi-hourglass-split"></i></div>
+            <h5 class="text-muted fw-semibold mb-1">Pending Approvals</h5>
+            <h2 class="display-5 fw-bold text-light mb-0">@ViewBag.PendingPayments</h2>
+            <small class="text-secondary">Payments awaiting review</small>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row g-4">
+    <div class="col-md-6">
+        <a asp-controller="Finance" asp-action="Defaulters" class="text-decoration-none">
+            <div class="glass-card p-4 text-center">
+                <i class="bi bi-exclamation-triangle-fill fs-1 text-danger mb-3 d-block"></i>
+                <h5 class="fw-bold">Fee Defaulters Report</h5>
+                <p class="text-muted small">View students with outstanding balances from <code>vw_FeeDefaulters</code> SQL view.</p>
+                <span class="btn btn-gradient btn-sm mt-2 px-4">View Defaulters</span>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-6">
+        <div class="glass-card p-4 text-center">
+            <i class="bi bi-graph-up-arrow fs-1 text-success mb-3 d-block"></i>
+            <h5 class="fw-bold">Revenue Summary</h5>
+            <p class="text-muted small">Real-time aggregation of approved fee payments across all programs and semesters.</p>
+            <div class="mt-3">
+                <div class="d-flex justify-content-between text-muted small mb-1">
+                    <span>Collection Rate</span>
+                    <span>Estimated 72%</span>
+                </div>
+                <div class="progress" style="height:8px; background:rgba(255,255,255,0.1);">
+                    <div class="progress-bar bg-success" style="width:72%;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

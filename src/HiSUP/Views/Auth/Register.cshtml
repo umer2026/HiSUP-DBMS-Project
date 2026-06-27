@@ -1,0 +1,74 @@
+@{
+    ViewData["Title"] = "Register Student";
+}
+<div class="row justify-content-center py-4">
+    <div class="col-md-7">
+        <div class="card glass-card p-5">
+            <div class="text-center mb-4">
+                <h2 class="fw-bold" style="font-family: 'Outfit', sans-serif;">Student Registration</h2>
+                <p class="text-muted">Register a new student account inside the HiSUP portal</p>
+            </div>
+            <form asp-controller="Auth" asp-action="Register" method="post">
+                @Html.AntiForgeryToken()
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-light fw-semibold">First Name</label>
+                        <input type="text" name="firstName"
+                               class="form-control bg-transparent text-light border-secondary" required />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-light fw-semibold">Last Name</label>
+                        <input type="text" name="lastName"
+                               class="form-control bg-transparent text-light border-secondary" required />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-light fw-semibold">Email Address</label>
+                        <input type="email" name="email" class="form-control bg-transparent text-light border-secondary"
+                               placeholder="student@hitec.edu.pk" required />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-light fw-semibold">Phone Number</label>
+                        <input type="text" name="phone" class="form-control bg-transparent text-light border-secondary"
+                               placeholder="0300-1234567" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-light fw-semibold">CNIC</label>
+                        <input type="text" name="cnic" class="form-control bg-transparent text-light border-secondary"
+                               placeholder="37405-1234567-1" required />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-light fw-semibold">Date of Birth</label>
+                        <input type="date" name="dob" class="form-control bg-transparent text-light border-secondary"
+                               required />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <label class="form-label text-light fw-semibold">Program</label>
+                        <select name="programId" class="form-select bg-dark text-light border-secondary" required>
+                            <option value="1">BS Computer Science (BSCS)</option>
+                            <option value="2">BS Software Engineering (BSSE)</option>
+                            <option value="3">BS Electrical Engineering (BSEE)</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <label class="form-label text-light fw-semibold">Password</label>
+                        <input type="password" name="password"
+                               class="form-control bg-transparent text-light border-secondary" required />
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-gradient w-100 py-3"><i class="bi bi-person-plus me-2"></i>Complete
+                    Registration</button>
+                </form>
+                <div class="text-center mt-4">
+                    <p class="text-secondary mb-0">Already registered? <a asp-controller="Auth" asp-action="Login"
+                                                                              class="text-info fw-semibold text-decoration-none">Sign in here</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>

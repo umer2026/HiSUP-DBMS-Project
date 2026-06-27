@@ -1,0 +1,97 @@
+@model List<HiSUP.Models.TranscriptEntryDto>
+@{
+    ViewData["Title"] = "Academic Transcript";
+}
+<div class="row mb-4">
+    <div class="col-md-12 text-center">
+        <h2 class="fw-bold" style="font-family: 'Outfit', sans-serif;"><i
+            class="bi bi-file-earmark-text text-success me-2"></i>Official Academic Transcript</h2>
+            <p class="text-muted">HITEC University Taxila — Department of Computer Science</p>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card glass-card p-5 border-success border-opacity-20 position-relative">
+                <!-- Decorative Seal Background -->
+                <div class="position-absolute top-50 start-50 translate-middle opacity-5 pointer-events-none">
+                    <i class="bi bi-mortarboard-fill" style="font-size: 20rem; color: var(--primary-accent);"></i>
+                </div>
+                <!-- School Header -->
+                <div class="row border-bottom border-secondary border-opacity-35 pb-4 mb-4">
+                    <div class="col-md-6">
+                        <h3 class="fw-bold mb-1" style="font-family: 'Outfit', sans-serif; letter-spacing: 0.5px;">HITEC
+                            UNIVERSITY TAXILA</h3>
+                            <p class="text-secondary mb-0">Department of Computer Science</p>
+                            <p class="text-secondary mb-0">Course Code: CS-318 (Advanced Database Systems)</p>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <h5 class="text-light mb-1">Date Issued: @DateTime.Now.ToString("yyyy-MM-dd")</h5>
+                            <p class="text-secondary mb-0">Record Type: Official Transcript</p>
+                        </div>
+                    </div>
+                    <!-- Grade Report Table -->
+                    <div class="table-responsive mb-4">
+                        <table class="table table-dark table-hover border-secondary align-middle">
+                            <thead>
+                                <tr class="text-secondary">
+                                    <th>Semester</th>
+                                    <th>Course Code</th>
+                                    <th>Course Title</th>
+                                    <th>Credits</th>
+                                    <th>Marks</th>
+                                    <th>Grade</th>
+                                    <th>Grade Points</th>
+                                    <th class="text-end">Semester GPA</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model == null || !Model.Any())
+                                {
+                                    <tr>
+                                        <td colspan="8" class="text-center text-secondary py-4">No academic results found.</td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    foreach (var entry in Model)
+                                    {
+                                        <tr>
+                                            <td>@entry.Semester @entry.Year</td>
+                                            <td><span class="badge bg-secondary font-monospace">@entry.CourseCode</span></td>
+                                            <td class="text-light">@entry.CourseTitle</td>
+                                            <td>@entry.Credits</td>
+                                            <td>@entry.Marks</td>
+                                            <td>
+                                                <span class="badge @(entry.GradeValue == "F" ? "bg-danger" : "badge-premium")">
+                                                    @entry.GradeValue
+                                                </span>
+                                            </td>
+                                            <td>@entry.GradePoints.ToString("0.00")</td>
+                                            <td class="text-end fw-bold text-info">@entry.SemGPA.ToString("0.00")</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Transcript Footer Info -->
+                    <div class="row border-top border-secondary border-opacity-35 pt-4">
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white bg-opacity-5 rounded-3">
+                                <h6 class="text-light fw-bold mb-2">Grading System Key</h6>
+                                <small class="text-secondary d-block">A+ (4.00) | A (4.00) | A- (3.70) | B+ (3.30) | B
+                                    (3.00)</small>
+                                    <small class="text-secondary d-block">B- (2.70) | C+ (2.30) | C (2.00) | C- (1.70) | D (1.00) |
+                                        F (0.00)</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 text-end d-flex flex-column justify-content-center">
+                                    <p class="mb-0 text-secondary">Verified by registrar office: <span
+                                        class="text-light fw-semibold">HiSUP Secure DB</span></p>
+                                        <small class="text-muted">This transcript is digital and verified securely under database
+                                            constraints.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>

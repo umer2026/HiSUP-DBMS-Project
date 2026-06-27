@@ -1,0 +1,6 @@
+FirstName,LastName,Email,Phone,CNIC,DateOfBirth,ProgramID,CurrentSemester
+Ali,Khan,ali.khan@hitec.edu.pk,03001234567,37405-1234567-1,2002-05-15,1,1
+Zainab,Fatima,zainab.fatima@hitec.edu.pk,03129876543,37405-7654321-2,2003-08-22,1,1
+Usman,Ahmad,usman.ahmad@hitec.edu.pk,03215554433,37405-1112223-3,2001-11-10,2,3
+Ayesha,Siddiqua,ayesha.s@hitec.edu.pk,03334445556,37405-4445556-4,2002-02-14,3,1
+Hamza,Ali,hamza.ali@hitec.edu.pk,03456667778,37405-8889990-5,2000-09-05,2,5

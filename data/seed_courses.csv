@@ -1,0 +1,8 @@
+CourseCode,CourseTitle,Credits,DeptID,PrerequisiteCourseCode
+CS-101,Introduction to Computing,3,1,
+CS-102,Programming Fundamentals,4,1,CS-101
+CS-201,Object Oriented Programming,4,1,CS-102
+CS-302,Database Systems,4,1,CS-201
+CS-402,Advanced Database Management Systems,3,1,CS-302
+EE-101,Basic Electrical Engineering,3,2,
+ME-101,Basic Mechanical Engineering,3,3,

@@ -1,0 +1,136 @@
+@model IEnumerable<HiSUP.Models.FeePayment>
+@{
+    ViewData["Title"] = "My Payments";
+    var feeStructures = ViewBag.FeeStructures as IEnumerable<HiSUP.Models.FeeStructure>;
+}
+
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="fw-bold text-light" style="font-family: 'Outfit', sans-serif;">
+                <i class="bi bi-wallet2 text-info me-2"></i>Fee Payments
+            </h2>
+            <p class="text-secondary">Manage your tuition fees and track your payment history.</p>
+        </div>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show glass-card border-success text-light" role="alert">
+            <i class="bi bi-check-circle me-2"></i>@TempData["Success"]
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show glass-card border-danger text-light" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>@TempData["Error"]
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="row">
+        <!-- Make a Payment Section -->
+        <div class="col-lg-4 mb-4">
+            <div class="card glass-card p-4 h-100">
+                <h4 class="text-light mb-4"><i class="bi bi-credit-card me-2"></i>Make a Payment</h4>
+                <form asp-controller="Student" asp-action="PayFee" method="post">
+                    @Html.AntiForgeryToken()
+                    
+                    <div class="mb-3">
+                        <label class="form-label text-light fw-semibold">Fee Structure</label>
+                        <select name="feeStructureId" class="form-select bg-dark text-light border-secondary" required>
+                            <option value="">-- Select Fee --</option>
+                            @if (feeStructures != null)
+                            {
+                                foreach (var fs in feeStructures)
+                                {
+                                    <option value="@fs.FeeStructureID">Semester @fs.Semester (@fs.TotalAmount.ToString("C"))</option>
+                                }
+                            }
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-light fw-semibold">Amount to Pay</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark border-secondary text-light">$</span>
+                            <input type="number" step="0.01" name="amount" class="form-control bg-transparent text-light border-secondary" required />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-light fw-semibold">Payment Method</label>
+                        <select name="paymentMethod" class="form-select bg-dark text-light border-secondary" required>
+                            <option value="Credit Card">Credit Card</option>
+                            <option value="Bank Transfer">Bank Transfer</option>
+                            <option value="Debit Card">Debit Card</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label text-light fw-semibold">Bank Account / Card Reference</label>
+                        <input type="text" name="bankAccount" class="form-control bg-transparent text-light border-secondary" placeholder="**** **** **** 1234" required />
+                    </div>
+
+                    <button type="submit" class="btn btn-gradient w-100 py-2 fw-bold">
+                        <i class="bi bi-shield-check me-2"></i>Process Payment
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Payment History Section -->
+        <div class="col-lg-8 mb-4">
+            <div class="card glass-card p-4 h-100">
+                <h4 class="text-light mb-4"><i class="bi bi-clock-history me-2"></i>Payment History</h4>
+                
+                @if (Model != null && Model.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-dark table-hover table-borderless align-middle custom-table">
+                            <thead class="text-secondary">
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Fee Type</th>
+                                    <th>Amount</th>
+                                    <th>Method</th>
+                                    <th>Transaction ID</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var payment in Model.OrderByDescending(p => p.PaymentDate))
+                                {
+                                    <tr>
+                                        <td>@payment.PaymentDate.ToString("MMM dd, yyyy")</td>
+                                        <td>Semester @(payment.FeeStructure?.Semester.ToString() ?? "Unknown")</td>
+                                        <td class="text-success fw-bold">@payment.AmountPaid.ToString("C")</td>
+                                        <td><span class="badge bg-secondary">@payment.PaymentMethod</span></td>
+                                        <td class="font-monospace text-muted small">@payment.TransactionID</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-5">
+                        <i class="bi bi-receipt text-secondary display-1 mb-3"></i>
+                        <h5 class="text-light">No Payments Yet</h5>
+                        <p class="text-secondary mb-0">Your payment history will appear here once you make a transaction.</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .custom-table tbody tr {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .custom-table tbody tr:last-child {
+        border-bottom: none;
+    }
+</style>

@@ -1,0 +1,73 @@
+@model List<HiSUP.Models.Enrollment>
+@{
+    ViewData["Title"] = "Enter Grades";
+    int sectionId = ViewBag.SectionID;
+}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <h2 class="fw-bold" style="font-family: 'Outfit', sans-serif;"><i class="bi bi-pencil-square text-info me-2"></i>Academic Grade Entry</h2>
+        <p class="text-muted">Submit final marks out of 100. The database triggers will auto-calculate GPA and letter grades.</p>
+    </div>
+</div>
+<form asp-action="SubmitGrades" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="sectionId" value="@sectionId" />
+    <div class="card glass-card p-4 mb-4">
+        <div class="table-responsive">
+            <table class="table table-dark table-hover border-secondary align-middle">
+                <thead>
+                    <tr>
+                        <th>StudentID</th>
+                        <th>Student Name</th>
+                        <th>Email</th>
+                        <th>Current Grade</th>
+                        <th style="width: 200px;">Enter Marks (0 - 100)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model == null || !Model.Any())
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center text-secondary py-4">No enrolled students found.</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        for (int i = 0; i < Model.Count; i++)
+                        {
+                            var enrollment = Model[i];
+                            <tr>
+                                <td>@enrollment.StudentID</td>
+                                <td class="fw-semibold text-light">@enrollment.Student.FirstName @enrollment.Student.LastName</td>
+                                <td>@enrollment.Student.Email</td>
+                                <td>
+                                    @if (enrollment.Grade != null)
+                                    {
+                                        <span class="badge badge-premium">@enrollment.Grade.GradeValue (Marks: @enrollment.Grade.Marks)</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-secondary">Not Graded</span>
+                                    }
+                                </td>
+                                <td>
+                                    <input type="hidden" name="gradeList[@i].EnrollmentID" value="@enrollment.EnrollmentID" />
+                                    <input type="number" name="gradeList[@i].Marks" min="0" max="100" 
+                                           class="form-control bg-transparent text-light border-secondary form-control-sm"
+                                           value="@(enrollment.Grade != null ? enrollment.Grade.Marks.ToString() : "")" required />
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    @if (Model != null && Model.Any())
+    {
+        <div class="text-end">
+            <a asp-action="Index" class="btn btn-outline-secondary me-2">Cancel</a>
+            <button type="submit" class="btn btn-gradient px-5">Submit & Merge Grades</button>
+        </div>
+    }
+</form>

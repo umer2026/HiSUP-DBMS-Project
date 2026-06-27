@@ -1,0 +1,91 @@
+@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="row align-items-center justify-content-center" style="min-height: 80vh;">
+    <div class="col-lg-8 text-center">
+        <div class="mb-4 fade-in">
+            <span style="font-size: 5rem; background: linear-gradient(135deg,#6366f1,#ec4899); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">
+                <i class="bi bi-mortarboard-fill"></i>
+            </span>
+        </div>
+        <h1 class="fw-bold mb-2 fade-in" style="font-family:'Outfit',sans-serif; font-size: 3rem;">
+            HITEC Smart University Portal
+        </h1>
+        <p class="text-muted mb-5 fs-5 fade-in">Your all-in-one academic management system — academics, finance, library, and more.</p>
+
+        @if (!User.Identity.IsAuthenticated)
+        {
+            <div class="d-flex gap-3 justify-content-center fade-in">
+                <a asp-controller="Auth" asp-action="Login" class="btn btn-gradient px-5 py-3 fw-bold fs-5">
+                    <i class="bi bi-box-arrow-in-right me-2"></i>Login to Portal
+                </a>
+                <a asp-controller="Auth" asp-action="Register" class="btn btn-outline-secondary px-5 py-3 fw-bold fs-5">
+                    <i class="bi bi-person-plus me-2"></i>Register
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="row g-4 justify-content-center mt-2 fade-in">
+                @if (User.IsInRole("Admin"))
+                {
+                    <div class="col-md-3">
+                        <a asp-controller="Admin" asp-action="Index" class="text-decoration-none">
+                            <div class="glass-card p-4 text-center">
+                                <i class="bi bi-shield-lock-fill fs-1 text-primary mb-3 d-block"></i>
+                                <h5 class="fw-bold">Admin Panel</h5>
+                                <p class="text-muted small mb-0">Manage students &amp; audit logs</p>
+                            </div>
+                        </a>
+                    </div>
+                }
+                @if (User.IsInRole("Student"))
+                {
+                    <div class="col-md-3">
+                        <a asp-controller="Student" asp-action="Index" class="text-decoration-none">
+                            <div class="glass-card p-4 text-center">
+                                <i class="bi bi-person-circle fs-1 text-info mb-3 d-block"></i>
+                                <h5 class="fw-bold">Student Portal</h5>
+                                <p class="text-muted small mb-0">Courses, payments &amp; transcript</p>
+                            </div>
+                        </a>
+                    </div>
+                }
+                @if (User.IsInRole("Faculty"))
+                {
+                    <div class="col-md-3">
+                        <a asp-controller="Faculty" asp-action="Index" class="text-decoration-none">
+                            <div class="glass-card p-4 text-center">
+                                <i class="bi bi-person-workspace fs-1 text-success mb-3 d-block"></i>
+                                <h5 class="fw-bold">Faculty Portal</h5>
+                                <p class="text-muted small mb-0">Attendance &amp; grade entry</p>
+                            </div>
+                        </a>
+                    </div>
+                }
+                @if (User.IsInRole("Finance"))
+                {
+                    <div class="col-md-3">
+                        <a asp-controller="Finance" asp-action="Index" class="text-decoration-none">
+                            <div class="glass-card p-4 text-center">
+                                <i class="bi bi-cash-stack fs-1 text-warning mb-3 d-block"></i>
+                                <h5 class="fw-bold">Finance Portal</h5>
+                                <p class="text-muted small mb-0">Payments &amp; defaulters</p>
+                            </div>
+                        </a>
+                    </div>
+                }
+                <div class="col-md-3">
+                    <a asp-controller="Library" asp-action="Index" class="text-decoration-none">
+                        <div class="glass-card p-4 text-center">
+                            <i class="bi bi-book-fill fs-1 text-danger mb-3 d-block"></i>
+                            <h5 class="fw-bold">Library</h5>
+                            <p class="text-muted small mb-0">Search catalog &amp; issues</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+</div>

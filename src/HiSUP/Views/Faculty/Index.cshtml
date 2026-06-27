@@ -1,0 +1,128 @@
+@model List<HiSUP.Controllers.vw_FacultyCourseLoadDto>
+@{
+    ViewData["Title"] = "Faculty Dashboard";
+}
+
+<!-- Header -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="glass-card p-4 d-flex align-items-center justify-content-between">
+            <div>
+                <h1 class="fw-bold mb-1" style="font-family:'Outfit',sans-serif;">
+                    <i class="bi bi-person-workspace me-2 text-success"></i>Faculty Dashboard
+                </h1>
+                <p class="text-muted mb-0">
+                    @if (Model != null && Model.Count > 0)
+                    {
+                        @($"{Model[0].FirstName} {Model[0].LastName} — {Model[0].Designation}")
+                    }
+                    else
+                    {
+                        @:View your assigned sections and manage attendance & grades.
+                    }
+                </p>
+            </div>
+            <span class="badge badge-premium px-3 py-2 fs-6">
+                <i class="bi bi-person-workspace me-1"></i>Faculty
+            </span>
+        </div>
+    </div>
+</div>
+
+<!-- Summary Stats -->
+@if (Model != null && Model.Count > 0)
+{
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="glass-card p-4 text-center">
+                <div class="text-success fs-1 mb-2"><i class="bi bi-journal-bookmark-fill"></i></div>
+                <h5 class="text-muted fw-semibold mb-1">Sections Assigned</h5>
+                <h2 class="display-5 fw-bold text-light">@Model.Count</h2>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="glass-card p-4 text-center">
+                <div class="text-primary fs-1 mb-2"><i class="bi bi-people-fill"></i></div>
+                <h5 class="text-muted fw-semibold mb-1">Total Enrolled</h5>
+                <h2 class="display-5 fw-bold text-light">@Model.Sum(m => m.EnrolledCount)</h2>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="glass-card p-4 text-center">
+                <div class="text-warning fs-1 mb-2"><i class="bi bi-person-badge-fill"></i></div>
+                <h5 class="text-muted fw-semibold mb-1">Designation</h5>
+                <h3 class="fw-bold text-light">@Model[0].Designation</h3>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Course Sections Table -->
+<div class="glass-card p-0 overflow-hidden">
+    <div class="p-4 border-bottom border-secondary border-opacity-25">
+        <h5 class="fw-bold mb-0">
+            <i class="bi bi-calendar3 me-2 text-success"></i>My Assigned Sections (vw_FacultyCourseLoad)
+        </h5>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-dark table-hover mb-0 align-middle">
+            <thead>
+                <tr>
+                    <th class="ps-4">Section</th>
+                    <th>Course</th>
+                    <th>Semester / Year</th>
+                    <th>Room</th>
+                    <th>Enrollment</th>
+                    <th class="pe-4 text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model == null || !Model.Any())
+                {
+                    <tr>
+                        <td colspan="6" class="text-center py-5 text-secondary">
+                            <i class="bi bi-calendar-x fs-2 d-block mb-2 opacity-40"></i>
+                            No sections assigned yet.
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var row in Model)
+                    {
+                        <tr>
+                            <td class="ps-4">
+                                <span class="fw-bold text-light">@row.SectionName</span>
+                            </td>
+                            <td>
+                                <span class="badge bg-secondary bg-opacity-50 me-1">@row.CourseCode</span>
+                                @row.CourseTitle
+                            </td>
+                            <td>@row.Semester @row.Year</td>
+                            <td><i class="bi bi-building me-1 text-muted"></i>@row.RoomNo</td>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="progress flex-grow-1" style="height:6px; background:rgba(255,255,255,0.1);">
+                                        <div class="progress-bar bg-success"
+                                             style="width: @(row.Capacity > 0 ? (row.EnrolledCount * 100 / row.Capacity) : 0)%"></div>
+                                    </div>
+                                    <small class="text-muted">@row.EnrolledCount / @row.Capacity</small>
+                                </div>
+                            </td>
+                            <td class="pe-4 text-end">
+                                <a asp-action="MarkAttendance" asp-route-sectionId="@row.SectionID"
+                                   class="btn btn-sm btn-outline-success me-1">
+                                    <i class="bi bi-calendar-check"></i> Attendance
+                                </a>
+                                <a asp-action="GradeEntry" asp-route-sectionId="@row.SectionID"
+                                   class="btn btn-sm btn-outline-warning">
+                                    <i class="bi bi-pencil-square"></i> Grades
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

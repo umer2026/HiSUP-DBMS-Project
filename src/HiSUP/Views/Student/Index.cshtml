@@ -1,0 +1,121 @@
+@model HiSUP.Controllers.vw_StudentDashboardDto
+@{
+    ViewData["Title"] = "Student Dashboard";
+}
+
+@if (Model == null)
+{
+    <div class="text-center py-5 text-muted">
+        <i class="bi bi-exclamation-circle fs-1 d-block mb-3"></i>
+        <h5>Unable to load dashboard. Please <a asp-controller="Auth" asp-action="Login">login again</a>.</h5>
+    </div>
+    return;
+}
+
+<!-- Welcome Banner -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="glass-card p-4 d-flex align-items-center justify-content-between">
+            <div>
+                <h1 class="fw-bold mb-1" style="font-family:'Outfit',sans-serif;">
+                    Welcome back, @Model.FirstName @Model.LastName! 👋
+                </h1>
+                <p class="text-muted mb-0">
+                    <i class="bi bi-mortarboard-fill me-1"></i>@Model.ProgramName
+                    &nbsp;&bull;&nbsp;
+                    <i class="bi bi-calendar3 me-1"></i>Semester @Model.CurrentSemester
+                    &nbsp;&bull;&nbsp;
+                    <span class="text-light">@Model.Email</span>
+                </p>
+            </div>
+            <span class="badge badge-premium px-3 py-2 fs-6">
+                <i class="bi bi-circle-fill me-1 @(Model.Status == "Active" ? "text-success" : "text-warning")" style="font-size:0.6rem;"></i>
+                @Model.Status
+            </span>
+        </div>
+    </div>
+</div>
+
+<!-- Key Stats -->
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="glass-card p-4 text-center">
+            <div class="text-primary fs-1 mb-2"><i class="bi bi-mortarboard-fill"></i></div>
+            <h5 class="text-muted fw-semibold mb-1">Cumulative CGPA</h5>
+            <h2 class="display-4 fw-bold text-light mb-0">@Model.CGPA.ToString("0.00")</h2>
+            <small class="text-secondary">Out of 4.00</small>
+            <div class="progress mt-3" style="height:6px; background:rgba(255,255,255,0.1);">
+                <div class="progress-bar bg-primary" style="width:@((Model.CGPA / 4.0m * 100).ToString("0"))%"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="glass-card p-4 text-center">
+            <div class="text-success fs-1 mb-2"><i class="bi bi-calendar-check-fill"></i></div>
+            <h5 class="text-muted fw-semibold mb-1">Attendance Rate</h5>
+            <h2 class="display-4 fw-bold text-light mb-0">@Model.AttendancePercentage.ToString("0.0")<small class="fs-5">%</small></h2>
+            <small class="@(Model.AttendancePercentage < 75 ? "text-danger" : "text-secondary")">
+                @(Model.AttendancePercentage < 75 ? "⚠ Below 75% minimum!" : "Minimum required: 75%")
+            </small>
+            <div class="progress mt-3" style="height:6px; background:rgba(255,255,255,0.1);">
+                <div class="progress-bar @(Model.AttendancePercentage < 75 ? "bg-danger" : "bg-success")"
+                     style="width:@Model.AttendancePercentage.ToString("0")%"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="glass-card p-4 text-center">
+            <div class="text-danger fs-1 mb-2"><i class="bi bi-wallet2"></i></div>
+            <h5 class="text-muted fw-semibold mb-1">Outstanding Balance</h5>
+            <h2 class="display-4 fw-bold text-light mb-0">Rs. @Model.OutstandingFee.ToString("N0")</h2>
+            <small class="@(Model.OutstandingFee > 0 ? "text-warning" : "text-secondary")">
+                @(Model.OutstandingFee > 0 ? "Payment required" : "No dues outstanding")
+            </small>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row">
+    <div class="col-12">
+        <h4 class="fw-bold mb-3 text-light">Quick Actions</h4>
+        <div class="row g-4">
+            <div class="col-md-3">
+                <a asp-controller="Student" asp-action="CourseRegistration" class="text-decoration-none">
+                    <div class="glass-card p-4 text-center">
+                        <i class="bi bi-journal-plus fs-1 text-primary d-block mb-2"></i>
+                        <h6 class="fw-bold">Course Registration</h6>
+                        <p class="text-muted small mb-0">Enroll in available sections</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a asp-controller="Student" asp-action="Payments" class="text-decoration-none">
+                    <div class="glass-card p-4 text-center">
+                        <i class="bi bi-credit-card-fill fs-1 text-success d-block mb-2"></i>
+                        <h6 class="fw-bold">Pay Fees</h6>
+                        <p class="text-muted small mb-0">Submit fee payments securely</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a asp-controller="Student" asp-action="Transcript" class="text-decoration-none">
+                    <div class="glass-card p-4 text-center">
+                        <i class="bi bi-file-earmark-text-fill fs-1 text-info d-block mb-2"></i>
+                        <h6 class="fw-bold">Academic Transcript</h6>
+                        <p class="text-muted small mb-0">View full grade history</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a asp-controller="Library" asp-action="Index" class="text-decoration-none">
+                    <div class="glass-card p-4 text-center">
+                        <i class="bi bi-book-fill fs-1 text-warning d-block mb-2"></i>
+                        <h6 class="fw-bold">Library</h6>
+                        <p class="text-muted small mb-0">Search &amp; borrow books</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
